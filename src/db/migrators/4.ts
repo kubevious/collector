@@ -8,7 +8,7 @@ export default Migrator()
         
         logger.info("Will be dropping history tables.");
 
-        var queryies = [
+        const queries = [
 
         "DROP TABLE IF EXISTS `diff_items`",
         "DROP TABLE IF EXISTS `snap_items`",
@@ -107,5 +107,5 @@ export default Migrator()
 
         ];
 
-        return Promise.serial(queryies, x => executeSql(x));
+        return Promise.serial(queries, x => executeSql(x));
     });

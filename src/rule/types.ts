@@ -1,6 +1,6 @@
 export interface RuleObject {
     name: string;
-    hash: string;
+    hash: Buffer; //string;
     target: string;
     script: string;
 }

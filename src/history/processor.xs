@@ -57,7 +57,8 @@ export class HistoryProcessor
 
         this._currentState = this._makeNewConfigState();
 
-        this._database.onConnect(this._onDbConnected.bind(this));
+        // TODO: FIX ME
+        // this._database.onConnect(this._onDbConnected.bind(this));
     }
 
     get logger() {

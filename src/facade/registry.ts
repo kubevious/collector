@@ -27,7 +27,7 @@ export class FacadeRegistry
             this._processConcreteRegistry.bind(this),
             {
                 queueSize: 1,
-                rescheduleTimeoutMs: 5000
+                rescheduleTimeoutMs: 1000
             });
     }
 
@@ -49,34 +49,35 @@ export class FacadeRegistry
         this._jobDampener.acceptJob(registry);
     }
 
-    private _processConcreteRegistry(data: ConcreteRegistry, date: Date)
+    private _processConcreteRegistry(registry: ConcreteRegistry, date: Date)
     {
-        this._logger.info("[_processConcreteRegistry] Date: %s. item count: %s", date.toISOString(), data.allItems.length);
+        this._logger.info("[_processConcreteRegistry] Date: %s. Item count: %s, Snapshot: %s", date.toISOString(), registry.allItems.length, registry.snapshotId);
 
-        return this._processCurrentSnapshot(data);
-    }
+        return this._context.executor.process({ 
+            registry: registry,
+            snapshotId: registry.snapshotId,
+            date: registry.date
+         });
+         
+        // return this._context.tracker.scope("FacadeRegistry::_processCurrentSnapshot", (tracker) => {
 
-    private _processCurrentSnapshot(registry: ConcreteRegistry)
-    {
-        return this._context.tracker.scope("FacadeRegistry::_processCurrentSnapshot", (tracker) => {
+        //     const logicProcessor = new LogicProcessor(
+        //         this.logger,
+        //         tracker,
+        //         this._context.parserLoader,
+        //         registry,
+        //         {});
+        //     return logicProcessor.process()
+        //         .then(registryState => {
+        //             this.logger.info("LogicProcessor Complete.")
+        //             this.logger.info("RegistryState Item Count: %s", registryState.getCount());
 
-            const logicProcessor = new LogicProcessor(
-                this.logger,
-                tracker,
-                this._context.parserLoader,
-                registry,
-                {});
-            return logicProcessor.process()
-                .then(registryState => {
-                    this.logger.info("LogicProcessor Complete.")
-                    this.logger.info("RegistryState Item Count: %s", registryState.getCount());
-
-                    return this._context.snapshotProcessor.process(registryState, tracker);
-                })
-                .then(bundle => {
-                    return this._runFinalize(bundle, tracker);
-                })
-        });
+        //             return this._context.snapshotProcessor.process(registryState, tracker);
+        //         })
+        //         .then(bundle => {
+        //             return this._runFinalize(bundle, tracker);
+        //         })
+        // });
     }
 
     private _runFinalize(bundle : RegistryBundleState, tracker: ProcessingTrackerScoper)
@@ -109,9 +110,9 @@ export class FacadeRegistry
             //     });
             // })
             .then(() => {
-                return tracker.scope("history-accept", () => {
-                    return this._context.historyProcessor.accept(bundle);
-                });
+                // return tracker.scope("history-accept", () => {
+                //     return this._context.historyProcessor.accept(bundle);
+                // });
             })
     }
 

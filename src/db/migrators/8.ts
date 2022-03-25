@@ -1,5 +1,7 @@
 import _ from 'the-lodash';
 import { Promise } from 'the-promise';
+import { makeDbRule } from '../../rule/rule-accessor';
+import { RuleConfig } from '@kubevious/ui-middleware/dist/services/rule';
 
 import { Migrator } from '../migration';
 
@@ -19,12 +21,12 @@ export default Migrator()
             }))
             .then(() => Promise.serial(RULES, (x : any) => {
                 x.enabled = true;
-                const row = context.ruleAccessor.makeDbRule(x);
+                const row = makeDbRule(x);
                 const sql = `INSERT IGNORE INTO \`rules\`(\`name\`, \`enabled\`, \`date\`, \`target\`, \`script\`, \`hash\`) VALUES (?, ?, ?, ?, ?, ?)`;
                 const params = [
                     row.name, 
                     row.enabled, 
-                    row.date, 
+                    new Date(), // row.date, // TODO
                     row.target, 
                     row.script, 
                     row.hash
@@ -56,9 +58,10 @@ const MARKERS = [
     }
 ]
 
-const RULES = [
+const RULES : RuleConfig[] = [
     {
         name: 'container-memory-usage',
+        enabled: true,
         target:
 `select('Container')`,
         script:
@@ -76,6 +79,7 @@ if (value) {
     },
     {
         name: 'image-latest-tag-check',
+        enabled: true,
         target:
 `select('Image')`,
         script:
@@ -85,6 +89,7 @@ if (value) {
     },
     {
         name: 'large-namespace',
+        enabled: true,
         target:
 `select('Namespace')
     .filter(({item}) => {
@@ -98,6 +103,7 @@ if (value) {
     },
     {
         name: 'no-resource-limits-pods',
+        enabled: true,
         target:
 `select('Namespace')
     .filter(({item}) => item.name != 'kube-system')
@@ -113,6 +119,7 @@ if (value) {
     },
     {
         name: 'public-application',
+        enabled: true,
         target:
 `select('Application')
     .filter(({item}) => {

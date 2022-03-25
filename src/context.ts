@@ -8,25 +8,26 @@ import { FacadeRegistry } from './facade/registry';
 import { SearchEngine } from './search/engine';
 import { AutocompleteBuilder } from './search/autocomplete-builder';
 import { Database } from './db';
-import { HistoryProcessor } from './history/processor';
-import { HistoryCleanupProcessor } from './history/history-cleanup-processor';
+// import { HistoryProcessor } from './history/processor';
+// import { HistoryCleanupProcessor } from './history/history-cleanup-processor';
 import { Registry } from './registry/registry';
 import { Collector } from './collector/collector';
 import { DebugObjectLogger } from './utils/debug-object-logger';
-import { MarkerAccessor } from './rule/marker-accessor';
-import { MarkerCache } from './rule/marker-cache';
-import { RuleAccessor } from './rule/rule-accessor';
-import { RuleCache } from './rule/rule-cache';
-import { RuleEngine } from './rule/rule-engine';
+// import { MarkerAccessor } from './rule/marker-accessor';
+// import { MarkerCache } from './rule/marker-cache';
+// import { RuleAccessor } from './rule/rule-accessor';
+// import { RuleCache } from './rule/rule-cache';
+// import { RuleEngine } from './rule/rule-engine';
 import { SnapshotProcessor } from './snapshot-processor';
 import { WorldviousClient } from '@kubevious/worldvious-client';
 
 import { WebServer } from './server';
 
-import { SnapshotReader as HistorySnapshotReader } from '@kubevious/helpers/dist/history/snapshot-reader';
+// import { SnapshotReader as HistorySnapshotReader } from '@kubevious/helpers/dist/history/snapshot-reader';
 import { SeriesResampler } from '@kubevious/helpers/dist/history/series-resampler';
 
 import { ParserLoader } from '@kubevious/helper-logic-processor';
+import { Executor } from './app/executor/executor'
 
 
 import VERSION from './version'
@@ -41,9 +42,10 @@ export class Context
 
     private _server: WebServer;
 
-    private _database: Database;
+    private _dataStore: Database;
     private _searchEngine: SearchEngine;
-    private _historyProcessor: HistoryProcessor;
+    // private _historyProcessor: HistoryProcessor;
+
     private _collector: Collector;
     private _registry: Registry;
     private _autocompleteBuilder: AutocompleteBuilder;
@@ -52,17 +54,19 @@ export class Context
 
     private _debugObjectLogger: DebugObjectLogger;
 
-    private _markerAccessor: MarkerAccessor;
-    private _markerCache: MarkerCache;
-    private _ruleAccessor: RuleAccessor;
-    private _ruleCache: RuleCache;
-    private _ruleEngine: RuleEngine;
+    private _executor : Executor;
 
-    private _historySnapshotReader: HistorySnapshotReader;
+    // private _markerAccessor: MarkerAccessor;
+    // private _markerCache: MarkerCache;
+    // private _ruleAccessor: RuleAccessor;
+    // private _ruleCache: RuleCache;
+    // private _ruleEngine: RuleEngine;
+
+    // private _historySnapshotReader: HistorySnapshotReader;
 
     private _snapshotProcessor: SnapshotProcessor;
 
-    private _historyCleanupProcessor: HistoryCleanupProcessor;
+    // private _historyCleanupProcessor: HistoryCleanupProcessor;
 
     private _seriesResamplerHelper: SeriesResampler;
 
@@ -79,28 +83,29 @@ export class Context
 
         this._parserLoader = new ParserLoader(this.logger);
 
-        this._database = new Database(this._logger, this);
+        this._dataStore = new Database(this._logger, this);
         this._searchEngine = new SearchEngine(this);
-        this._historyProcessor = new HistoryProcessor(this);
+        // this._historyProcessor = new HistoryProcessor(this);
         this._collector = new Collector(this);
         this._registry = new Registry(this);
         this._autocompleteBuilder = new AutocompleteBuilder(this);
 
         this._facadeRegistry = new FacadeRegistry(this);
+        this._executor = new Executor(this);
 
         this._debugObjectLogger = new DebugObjectLogger(this);
 
-        this._markerAccessor = new MarkerAccessor(this, this.database.dataStore);
-        this._markerCache = new MarkerCache(this);
-        this._ruleAccessor = new RuleAccessor(this, this.database.dataStore);
-        this._ruleCache = new RuleCache(this);
-        this._ruleEngine = new RuleEngine(this, this.database.dataStore);
+        // this._markerAccessor = new MarkerAccessor(this, this.database.dataStore);
+        // this._markerCache = new MarkerCache(this);
+        // this._ruleAccessor = new RuleAccessor(this, this.database.dataStore);
+        // this._ruleCache = new RuleCache(this);
+        // this._ruleEngine = new RuleEngine(this, this.database.dataStore);
 
-        this._historySnapshotReader = new HistorySnapshotReader(this.logger, this._database.driver);
+        // this._historySnapshotReader = new HistorySnapshotReader(this.logger, this._dataStore.driver);
 
         this._snapshotProcessor = new SnapshotProcessor(this);
 
-        this._historyCleanupProcessor = new HistoryCleanupProcessor(this);
+        // this._historyCleanupProcessor = new HistoryCleanupProcessor(this);
 
         this._seriesResamplerHelper = new SeriesResampler(200)
             .column("changes", _.max)
@@ -118,7 +123,7 @@ export class Context
 
         backend.stage("setup-metrics-tracker", () => this._setupMetricsTracker());
 
-        backend.stage("setup-db", () => this._database.init());
+        backend.stage("setup-db", () => this._dataStore.init());
 
         backend.stage("setup-parser-loader", () => this._parserLoader.init());
 
@@ -142,9 +147,17 @@ export class Context
     }
 
     get database() {
-        return this._database;
+        return this._dataStore;
     }
 
+    get dataStore() {
+        return this._dataStore;
+    }
+
+    get executor() : Executor {
+        return this._executor;
+    }
+    
     get facadeRegistry() {
         return this._facadeRegistry;
     }
@@ -153,9 +166,9 @@ export class Context
         return this._searchEngine;
     }
 
-    get historyProcessor() {
-        return this._historyProcessor;
-    }
+    // get historyProcessor() {
+    //     return this._historyProcessor;
+    // }
 
     get collector() {
         return this._collector;
@@ -169,37 +182,37 @@ export class Context
         return this._debugObjectLogger;
     }
 
-    get markerAccessor() {
-        return this._markerAccessor;
-    }
+    // get markerAccessor() {
+    //     return this._markerAccessor;
+    // }
 
-    get markerCache() {
-        return this._markerCache;
-    }
+    // get markerCache() {
+    //     return this._markerCache;
+    // }
 
-    get ruleAccessor() {
-        return this._ruleAccessor;
-    }
+    // get ruleAccessor() {
+    //     return this._ruleAccessor;
+    // }
 
-    get ruleCache() {
-        return this._ruleCache;
-    }
+    // get ruleCache() {
+    //     return this._ruleCache;
+    // }
 
-    get ruleEngine() {
-        return this._ruleEngine;
-    }
+    // get ruleEngine() {
+    //     return this._ruleEngine;
+    // }
 
-    get historySnapshotReader() {
-        return this._historySnapshotReader;
-    }
+    // get historySnapshotReader() {
+    //     return this._historySnapshotReader;
+    // }
 
     get snapshotProcessor() {
         return this._snapshotProcessor;
     }
 
-    get historyCleanupProcessor() {
-        return this._historyCleanupProcessor;
-    }
+    // get historyCleanupProcessor() {
+    //     return this._historyCleanupProcessor;
+    // }
 
     get worldvious() {
         return this._worldvious;

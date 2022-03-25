@@ -21,12 +21,14 @@
   },
   "homepage": "https://github.com/kubevious/collector",
   "dependencies": {
-    "@kubevious/easy-data-store": "^1.0.9",
+    "@kubevious/data-models": "^1.0.2",
+    "@kubevious/easy-data-store": "^1.0.11",
     "@kubevious/entity-meta": "^1.0.56",
     "@kubevious/helper-backend": "^1.0.38",
     "@kubevious/helper-logic-processor": "^1.0.70",
     "@kubevious/helper-rule-engine": "^1.0.21",
     "@kubevious/helpers": "^1.0.62",
+    "@kubevious/ui-middleware": "^1.0.43",
     "@kubevious/websocket-server": "^1.0.26",
     "@kubevious/worldvious-client": "^1.0.6",
     "cron": "^1.8.2",
@@ -60,10 +62,12 @@
     "the-logger": "^2.0.14",
     "the-promise": "^2.0.13",
     "@kubevious/helpers": "^1.0.62",
-    "@kubevious/easy-data-store": "^1.0.9",
+    "@kubevious/easy-data-store": "^1.0.11",
     "@kubevious/helper-backend": "^1.0.38",
     "@kubevious/helper-logic-processor": "^1.0.70",
     "@kubevious/helper-rule-engine": "^1.0.21",
-    "@kubevious/worldvious-client": "^1.0.6"
+    "@kubevious/worldvious-client": "^1.0.6",
+    "@kubevious/entity-meta": "^1.0.56",
+    "@kubevious/data-models": "^1.0.2"
   }
 }

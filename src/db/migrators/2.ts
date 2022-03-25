@@ -6,7 +6,7 @@ import { Migrator } from '../migration';
 export default Migrator()
     .handler(({ logger, driver, executeSql, context }) => {
         
-        var queries = [
+        const queries = [
 
             "CREATE TABLE IF NOT EXISTS `snapshots` (" +
                 "`id` int unsigned NOT NULL AUTO_INCREMENT," +

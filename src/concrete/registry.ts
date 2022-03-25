@@ -9,19 +9,25 @@ import { ItemId, IConcreteRegistry } from '@kubevious/helper-logic-processor'
 export class ConcreteRegistry implements IConcreteRegistry
 {
     private _logger : ILogger;
+    private _snapshotId: string;
     private _date : Date;
 
     private _flatItemsDict : Record<any, ConcreteItem> = {};
     private _itemsKindDict : Record<any, Record<any, ConcreteItem>> = {};
 
-    constructor(logger: ILogger, date: Date)
+    constructor(logger: ILogger, snapshotId: string, date: Date)
     {
         this._logger = logger.sublogger("ConcreteRegistry");
+        this._snapshotId = snapshotId;
         this._date =  date
     }
 
     get logger() : ILogger {
         return this._logger;
+    }
+
+    get snapshotId() {
+        return this._snapshotId;
     }
 
     get date() {
@@ -36,8 +42,8 @@ export class ConcreteRegistry implements IConcreteRegistry
     {
         this.logger.verbose("[add] ", id);
 
-        let rawId = this._makeDictId(id);
-        let item = new ConcreteItem(this, id, obj);
+        const rawId = this._makeDictId(id);
+        const item = new ConcreteItem(this, id, obj);
 
         this._flatItemsDict[rawId] = item;
 
@@ -51,9 +57,9 @@ export class ConcreteRegistry implements IConcreteRegistry
     {
         this.logger.verbose("[remove] %s", id);
 
-        let rawId = this._makeDictId(id);
+        const rawId = this._makeDictId(id);
 
-        let item = this._flatItemsDict[rawId];
+        const item = this._flatItemsDict[rawId];
         if (item) {
 
             const groupDict = this._itemsKindDict[item.groupKey];
@@ -73,8 +79,8 @@ export class ConcreteRegistry implements IConcreteRegistry
 
     findById(id: ItemId) : ConcreteItem | null
     {
-        let rawId = this._makeDictId(id);
-        let item = this._flatItemsDict[rawId];
+        const rawId = this._makeDictId(id);
+        const item = this._flatItemsDict[rawId];
         if (item) {
             return item;
         }
@@ -82,8 +88,8 @@ export class ConcreteRegistry implements IConcreteRegistry
     }
 
     filterItems(idFilter: any) : ConcreteItem[] {
-        let result : ConcreteItem[] = [];
-        for(let item of this.allItems) {
+        const result : ConcreteItem[] = [];
+        for(const item of this.allItems) {
             if (item.matchesFilter(idFilter)) {
                 result.push(item);
             }
@@ -101,7 +107,7 @@ export class ConcreteRegistry implements IConcreteRegistry
     extractCapacity()
     {
         let cap = [];
-        for(let groupKey of _.keys(this._itemsKindDict))
+        for(const groupKey of _.keys(this._itemsKindDict))
         {
             cap.push({
                 name: groupKey,
@@ -118,7 +124,7 @@ export class ConcreteRegistry implements IConcreteRegistry
         this.logger.info("[concreteRegistry] Total Count: %s", _.keys(this._flatItemsDict).length);
 
         const counters = this.extractCapacity();
-        for(let x of counters)
+        for(const x of counters)
         {
             this.logger.info("[concreteRegistry] %s :: %s", x.name, x.count);
         }
@@ -129,18 +135,18 @@ export class ConcreteRegistry implements IConcreteRegistry
 
     debugOutputToFile()
     {
-        let writer = this.logger.outputStream("dump-concrete-registry");
+        const writer = this.logger.outputStream("dump-concrete-registry");
         if (!writer) {
             return Promise.resolve();
         }
 
         this.logger.info("[debugOutputToFile] BEGIN");
 
-        let ids = _.keys(this._flatItemsDict);
+        const ids = _.keys(this._flatItemsDict);
         ids.sort();
-        for(let id of ids) {
+        for(const id of ids) {
             writer.write('-) ' + id);
-            let item = this._flatItemsDict[id];
+            const item = this._flatItemsDict[id];
             item.debugOutputToFile(writer);
             writer.newLine();
         }
@@ -161,11 +167,11 @@ export class ConcreteRegistry implements IConcreteRegistry
 
     dump()
     {
-        let result : Record<any, any> = {};
-        let ids = _.keys(this._flatItemsDict);
+        const result : Record<any, any> = {};
+        const ids = _.keys(this._flatItemsDict);
         ids.sort();
-        for(let id of ids) {
-            let item = this._flatItemsDict[id];
+        for(const id of ids) {
+            const item = this._flatItemsDict[id];
             result[id] = item.dump();
         }
         return result;
@@ -173,7 +179,7 @@ export class ConcreteRegistry implements IConcreteRegistry
 
     debugOutputRegistry(registryName: string)
     {
-        for(let item of this.allItems)
+        for(const item of this.allItems)
         {
             const content = yaml.dump(item.config, { indent: 4 });
             let fileDir = `${registryName}`;
@@ -190,7 +196,7 @@ export class ConcreteRegistry implements IConcreteRegistry
             }
             fileName = `${fileName}${item.id.name}.yaml`
 
-            let filePath = `${fileDir}/${fileName}`;
+            const filePath = `${fileDir}/${fileName}`;
 
             this.logger.outputFile(filePath, content);
         }

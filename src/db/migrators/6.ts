@@ -6,7 +6,7 @@ import { Migrator } from '../migration';
 export default Migrator()
     .handler(({ logger, driver, executeSql, context }) => {
         
-        var queryies = [
+        const queries = [
 
             "CREATE TABLE IF NOT EXISTS `summary_counters` ( " +
             "  `id` int unsigned NOT NULL AUTO_INCREMENT, " +
@@ -91,5 +91,5 @@ export default Migrator()
             "); " 
         ];
 
-        return Promise.serial(queryies, x => executeSql(x));
+        return Promise.serial(queries, x => executeSql(x));
     });

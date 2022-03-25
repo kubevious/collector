@@ -6,7 +6,7 @@ import { Migrator } from '../migration';
 export default Migrator()
     .handler(({ logger, driver, executeSql, context }) => {
 
-        var queryies = [
+        const queries = [
             "CREATE TABLE IF NOT EXISTS `notification_snooze` (" +
             "    `kind` varchar(128) NOT NULL," +
             "    `feedback` binary(16) NOT NULL," +
@@ -15,5 +15,5 @@ export default Migrator()
             ") ENGINE=InnoDB CHARACTER SET utf8 COLLATE utf8_general_ci;"
         ];
 
-        return Promise.serial(queryies, x => executeSql(x));
+        return Promise.serial(queries, x => executeSql(x));
     })

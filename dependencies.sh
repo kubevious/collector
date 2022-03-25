@@ -11,6 +11,8 @@ REPO_DEPENDENCIES=(
     "@kubevious/helper-logic-processor"
     "@kubevious/helper-rule-engine"
     "@kubevious/worldvious-client"
+    "@kubevious/data-models"
+    "@kubevious/ui-middleware"
 )
 
 FORCE_RESOLVE_DEPENDENCIES=(
@@ -24,4 +26,6 @@ FORCE_RESOLVE_DEPENDENCIES=(
     "@kubevious/helper-logic-processor"
     "@kubevious/helper-rule-engine"
     "@kubevious/worldvious-client"
+    "@kubevious/data-models"
+    "@kubevious/ui-middleware"
 )

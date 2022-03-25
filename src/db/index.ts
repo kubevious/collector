@@ -9,12 +9,14 @@ import { DataStore, MySqlDriver, MySqlStatement } from '@kubevious/easy-data-sto
 
 import { Context } from '../context' ;
 
-import { setupMarkersMeta } from './meta/markers';
-import { setupRulesMeta } from './meta/rules';
-import { setupNotificationsMeta } from './meta/notifications';
-import { MigratorArgs, MigratorBuilder, MigratorInfo } from './migration';
+import { MigratorArgs, MigratorBuilder, MigratorInfo, SqlBuilder } from './migration';
 
-const TARGET_DB_VERSION : number = 8;
+import { SnapshotsAccessors, prepareSnapshots } from '@kubevious/data-models/dist/models/snapshots'
+import { RuleEngineAccessors, prepareRuleEngine } from '@kubevious/data-models/dist/models/rule_engine'
+
+const TARGET_DB_VERSION : number = 9;
+
+const DB_NAME = 'kubevious';
 
 export class Database
 {
@@ -24,8 +26,12 @@ export class Database
     private _migrators : Record<string, MigratorInfo> = {};
 
     private _dataStore : DataStore;
-    private _driver : MySqlDriver;
+    private _driver? : MySqlDriver;
     private _statements : Record<string, MySqlStatement> = {};
+
+    private _snapshots : SnapshotsAccessors;
+    private _ruleEngine : RuleEngineAccessors;
+
 
     constructor(logger : ILogger, context : Context)
     {
@@ -34,14 +40,11 @@ export class Database
 
         this._loadMigrators();
 
-        this._dataStore = new DataStore(logger.sublogger("DataStore"), false, {
-            charset: 'utf8_general_ci'
-        });
-        this._driver = this._dataStore.mysql;
+        this._dataStore = new DataStore(logger.sublogger("DataStore"), false);
 
-        this._driver.onMigrate(this._onDbMigrate.bind(this));
+        this._snapshots = prepareSnapshots(this._dataStore);
+        this._ruleEngine = prepareRuleEngine(this._dataStore);
 
-        this._setupMeta();
     }
 
     get logger() {
@@ -53,32 +56,33 @@ export class Database
     }
 
     get driver() {
-        return this._driver;
+        return this._driver!;
     }
 
     get isConnected() {
-        return this._driver.isConnected;
+        return this._driver?.isConnected ?? false;
     }
 
-    private _setupMeta()
-    {
-        setupMarkersMeta(this._dataStore.meta());
-        setupRulesMeta(this._dataStore.meta());
-        setupNotificationsMeta(this._dataStore.meta());
+    get snapshots() {
+        return this._snapshots;
+    }
+
+    get ruleEngine() {
+        return this._ruleEngine;
     }
 
     private _loadMigrators()
     {
-        var location = 'migrators';
+        const location = 'migrators';
         const migratorsDir = Path.join(__dirname, location);
 
-        var files = fs.readdirSync(migratorsDir);
+        let files = fs.readdirSync(migratorsDir);
         files = _.filter(files, x => x.endsWith('.d.ts'));
 
-        for(let fileName of files)
+        for(const fileName of files)
         {
-            let moduleName = fileName.replace('.d.ts', '');
-            let modulePath = location + '/' + moduleName;
+            const moduleName = fileName.replace('.d.ts', '');
+            const modulePath = location + '/' + moduleName;
             this._logger.info("Loading migrator %s from %s...", moduleName, modulePath);
 
             const migratorModule = require('./' + modulePath);
@@ -91,87 +95,92 @@ export class Database
         }
     }
 
-    onConnect(cb: ((driver: MySqlDriver) => Resolvable<any>))
+    onConnect(cb: () => Resolvable<any>)
     {
-        return this._driver.onConnect(cb);
+        return this._driver!.onConnect(cb);
     }
 
-    registerStatement(id: string, sql: string)
+    // registerStatement(id: string, sql: string)
+    // {
+    //     this._statements[id] = this._driver.statement(sql);
+    // }
+
+    // executeStatement(id: string, params?: any) : Promise<any>
+    // {
+    //     const statement = this._statements[id];
+    //     return statement.execute(params);
+    // }
+
+    // executeStatements(statements: {id: string, params?: any}[])
+    // {
+    //     const myStatements = statements.map(x => ({
+    //         statement: this._statements[x.id],
+    //         params: x.params
+    //     }))
+    //     return this._driver.executeStatements(myStatements);
+    // }
+
+    executeInTransaction<T>(tableNames: string[], cb: () => Resolvable<T>): Promise<any>
     {
-        this._statements[id] = this._driver.statement(sql);
+        return this._dataStore.executeInTransaction(tableNames, cb);
     }
 
-    executeStatement(id: string, params?: any) : Promise<any>
-    {
-        var statement = this._statements[id];
-        return statement.execute(params);
-    }
+    // executeSql(sql: string)
+    // {
+    //     return this.driver.executeSql(sql);
+    // }
 
-    executeStatements(statements: {id: string, params?: any}[])
-    {
-        var myStatements = statements.map(x => ({
-            statement: this._statements[x.id],
-            params: x.params
-        }))
-        return this._driver.executeStatements(myStatements);
-    }
-
-    executeInTransaction(cb: ((driver: MySqlDriver) => Promise<any>))
-    {
-        return this._driver.executeInTransaction(cb);
-    }
-
-    executeSql(sql: string)
-    {
-        return this.driver.executeSql(sql);
-    }
-
-    queryPartitions(tableName: string)
-    {
-        var sql = 
-            "SELECT PARTITION_NAME, PARTITION_DESCRIPTION " +
-            "FROM information_schema.partitions " +
-            `WHERE TABLE_SCHEMA='${process.env.MYSQL_DB}' ` +
-            `AND TABLE_NAME = '${tableName}' ` +
-            'AND PARTITION_NAME IS NOT NULL ' +
-            'AND PARTITION_DESCRIPTION != 0;';
+    // queryPartitions(tableName: string)
+    // {
+    //     const sql = 
+    //         "SELECT PARTITION_NAME, PARTITION_DESCRIPTION " +
+    //         "FROM information_schema.partitions " +
+    //         `WHERE TABLE_SCHEMA='${process.env.MYSQL_DB}' ` +
+    //         `AND TABLE_NAME = '${tableName}' ` +
+    //         'AND PARTITION_NAME IS NOT NULL ' +
+    //         'AND PARTITION_DESCRIPTION != 0;';
         
-        return this.executeSql(sql)
-            .then((results: any[]) => {
-                return results.map(x => ({
-                    name: x.PARTITION_NAME,
-                    value: parseInt(x.PARTITION_DESCRIPTION)
-                }));
-            })
-    }
+    //     return this.executeSql(sql)
+    //         .then((results: any[]) => {
+    //             return results.map(x => ({
+    //                 name: x.PARTITION_NAME,
+    //                 value: parseInt(x.PARTITION_DESCRIPTION)
+    //             }));
+    //         })
+    // }
 
-    createPartition(tableName: string, name: string, value: number)
-    {
-        this._logger.info("[createPartition] Table: %s, %s -> %s", tableName, name, value);
+    // createPartition(tableName: string, name: string, value: number)
+    // {
+    //     this._logger.info("[createPartition] Table: %s, %s -> %s", tableName, name, value);
 
-        var sql = 
-            `ALTER TABLE \`${tableName}\` ` +
-            `ADD PARTITION (PARTITION ${name} VALUES LESS THAN (${value}))`;
+    //     const sql = 
+    //         `ALTER TABLE \`${tableName}\` ` +
+    //         `ADD PARTITION (PARTITION ${name} VALUES LESS THAN (${value}))`;
         
-        return this.executeSql(sql);
-    }
+    //     return this.executeSql(sql);
+    // }
 
-    dropPartition(tableName: string, name: string)
-    {
-        this._logger.info("[dropPartition] Table: %s, %s", tableName, name);
+    // dropPartition(tableName: string, name: string)
+    // {
+    //     this._logger.info("[dropPartition] Table: %s, %s", tableName, name);
 
-        var sql = 
-            `ALTER TABLE \`${tableName}\` ` +
-            `DROP PARTITION ${name}`;
+    //     const sql = 
+    //         `ALTER TABLE \`${tableName}\` ` +
+    //         `DROP PARTITION ${name}`;
         
-        return this.executeSql(sql);
-    }
+    //     return this.executeSql(sql);
+    // }
 
     init()
     {
         this._logger.info("[init]")
+
         return Promise.resolve()
-            .then(() => this._dataStore.connect())
+            .then(() => this._dataStore.init())
+            .then(() => {
+                this._driver = this._dataStore.mysql!.databaseClients.find(x => x.name === DB_NAME)!.client;
+                this._driver.onMigrate(this._onDbMigrate.bind(this));
+            })
             .then(() => {
                 this._logger.info("[init] post connect.")
             })
@@ -202,7 +211,7 @@ export class Database
                         this.logger.error("[_processMigration] You are running database version more recent then the binary. Results may be unpredictable.");
                         return;
                     }
-                    var migrateableVersions = _.range(version + 1, TARGET_DB_VERSION + 1);
+                    const migrateableVersions = _.range(version + 1, TARGET_DB_VERSION + 1);
                     this.logger.info("[_processMigration] MigrateableVersions: ", migrateableVersions);
                     return Promise.serial(migrateableVersions, x => this._processVersionMigration(x));
                 })
@@ -213,17 +222,18 @@ export class Database
     {
         this.logger.info("[_processVersionMigration] target version: %s", targetVersion);
 
-        let migrator = this._migrators[targetVersion.toString()];
+        const migrator = this._migrators[targetVersion.toString()];
         if (!migrator) {
             throw new Error(`Missing Migrator for db version ${targetVersion}`);
         }
         return Promise.resolve()
             .then(() => {
-                let migratorArgs : MigratorArgs = {
+                const migratorArgs : MigratorArgs = {
                     logger: this.logger,
                     driver: this.driver,
                     executeSql: this._migratorExecuteSql.bind(this),
-                    context: this._context
+                    context: this._context,
+                    sql: new SqlBuilder()
                 }
                 return migrator.handler!(migratorArgs);
             })
@@ -252,7 +262,7 @@ export class Database
                 }
                 return this.driver.executeSql('SELECT `value` FROM `config` WHERE `key` = "DB_SCHEMA"')
                     .then((result: any[]) => {
-                        var value = _.head(result);
+                        const value = _.head(result);
                         if (value) {
                             return value.value.version || 0;
                         }
@@ -274,7 +284,7 @@ export class Database
     {
         this._logger.info("[_setDbVersion] version: %s", version);
 
-        var valueObj = {
+        const valueObj = {
             version: version
         };
 

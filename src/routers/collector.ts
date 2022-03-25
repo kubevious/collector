@@ -4,7 +4,7 @@ import { Router } from '@kubevious/helper-backend'
 import Joi from 'joi';
 import { ILogger } from 'the-logger';
 
-import { ReportableSnapshotItem, RequestReportSnapshot, ResponseReportSnapshot, RequestReportSnapshotItems, ResponseReportSnapshotItems, RequestActivateSnapshot, ResponseActivateSnapshot, RequestReportConfig } from '@kubevious/helpers/dist/reportable/types'
+import { RequestReportSnapshot, RequestReportSnapshotItems, RequestActivateSnapshot, RequestReportConfig } from '@kubevious/helpers/dist/reportable/types'
 
 
 export default function (router: Router, context: Context, logger: ILogger) {
