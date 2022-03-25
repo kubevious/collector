@@ -29,7 +29,7 @@ export class Executor
     {
         const myTarget = this._makeTaskTarget(target);
 
-        return this._context.tracker.scope("execute", (innerTracker) => {
+        return this._context.tracker.scope("executor", (innerTracker) => {
             const task = new ExecutorTask(this._logger, this._context, myTarget);
             return task.execute(innerTracker);
         })
@@ -41,7 +41,6 @@ export class Executor
 
             this._markComplete(target);
         })
-
         ;
     }
     

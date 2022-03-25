@@ -61,7 +61,7 @@ export class SnapshotPersistorTask
 
         const tables = [
             this._context.dataStore.snapshots.SnapshotConfigs,
-            this._context.dataStore.snapshots.ClusterLatestSnapshot,
+            // this._context.dataStore.snapshots.ClusterLatestSnapshot,
             this._context.dataStore.snapshots.SnapItems,
             this._context.dataStore.snapshots.DiffItems,
             this._context.dataStore.snapshots.DeltaItems,

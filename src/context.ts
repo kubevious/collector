@@ -29,6 +29,8 @@ import { SeriesResampler } from '@kubevious/helpers/dist/history/series-resample
 import { ParserLoader } from '@kubevious/helper-logic-processor';
 import { Executor } from './app/executor/executor'
 
+import { SnapshotPersistor } from './app/persistor';
+
 
 import VERSION from './version'
 
@@ -65,6 +67,7 @@ export class Context
     // private _historySnapshotReader: HistorySnapshotReader;
 
     private _snapshotProcessor: SnapshotProcessor;
+    private _snapshotPersistor : SnapshotPersistor;
 
     // private _historyCleanupProcessor: HistoryCleanupProcessor;
 
@@ -104,6 +107,7 @@ export class Context
         // this._historySnapshotReader = new HistorySnapshotReader(this.logger, this._dataStore.driver);
 
         this._snapshotProcessor = new SnapshotProcessor(this);
+        this._snapshotPersistor = new SnapshotPersistor(this);
 
         // this._historyCleanupProcessor = new HistoryCleanupProcessor(this);
 
@@ -208,6 +212,10 @@ export class Context
 
     get snapshotProcessor() {
         return this._snapshotProcessor;
+    }
+
+    get snapshotPersistor() {
+        return this._snapshotPersistor;
     }
 
     // get historyCleanupProcessor() {

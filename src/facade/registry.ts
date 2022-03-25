@@ -59,25 +59,7 @@ export class FacadeRegistry
             date: registry.date
          });
          
-        // return this._context.tracker.scope("FacadeRegistry::_processCurrentSnapshot", (tracker) => {
 
-        //     const logicProcessor = new LogicProcessor(
-        //         this.logger,
-        //         tracker,
-        //         this._context.parserLoader,
-        //         registry,
-        //         {});
-        //     return logicProcessor.process()
-        //         .then(registryState => {
-        //             this.logger.info("LogicProcessor Complete.")
-        //             this.logger.info("RegistryState Item Count: %s", registryState.getCount());
-
-        //             return this._context.snapshotProcessor.process(registryState, tracker);
-        //         })
-        //         .then(bundle => {
-        //             return this._runFinalize(bundle, tracker);
-        //         })
-        // });
     }
 
     private _runFinalize(bundle : RegistryBundleState, tracker: ProcessingTrackerScoper)

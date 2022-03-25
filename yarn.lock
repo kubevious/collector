@@ -64,18 +64,18 @@
   resolved "https://registry.yarnpkg.com/@humanwhocodes/object-schema/-/object-schema-1.2.1.tgz#b520529ec21d8e5945a1851dfd1c32e94e39ff45"
   integrity sha512-ZnQMnLV4e7hDlUvw8H+U8ASL02SS2Gn6+9Ac3wGGLIe7+je2AeAOxPY+izIPJDfFDb7eDjev0Us8MO1iFRN8hA==
 
-"@kubevious/data-models@^1.0.2":
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/@kubevious/data-models/-/data-models-1.0.2.tgz#5eba9646a8e333a06279f3585701afd1457356f1"
-  integrity sha512-RVSYCa9Mml00kWQ+4tAFijdJDIhR2JaorA5b5xVS3jogvHsqY48vORrLE+JiWmHiQyQg4r8h8vO2YnyoU9gC+Q==
+"@kubevious/data-models@^1.0.3":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@kubevious/data-models/-/data-models-1.0.3.tgz#5a6e839773060ea66c8f292581db4abf5dcd4347"
+  integrity sha512-lf+nPgyohXIE80hNWfWKvLtUpFwx3rskPW9M+yEjPVFb0f7BJFytKgH4wwxOr4+w8uq7MQeuuy9P0BfbDXNeww==
   dependencies:
-    "@kubevious/easy-data-store" "^1.0.10"
+    "@kubevious/easy-data-store" "^1.0.11"
     the-lodash "^2.0.9"
     the-logger "^2.0.14"
     the-promise "^2.0.13"
     uuid "^8.3.2"
 
-"@kubevious/easy-data-store@^1.0.10", "@kubevious/easy-data-store@^1.0.11":
+"@kubevious/easy-data-store@^1.0.11":
   version "1.0.11"
   resolved "https://registry.yarnpkg.com/@kubevious/easy-data-store/-/easy-data-store-1.0.11.tgz#e85853ee850893a70532f7ae849a1b0b48e8b7d3"
   integrity sha512-0GOosqTWl/bBGc54iwXFZYvBY+gysfIIRvmFm1Jl0Pn6/6dEBK9COohxF2+jUEiQlQMkx+I2U3UZZ9yAN1PzYQ==

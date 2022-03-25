@@ -8,8 +8,6 @@ import { RuleObject } from '../../rule/types';
 
 
 export interface SnapshotPersistorTarget {
-    projectId: Buffer,
-    clusterId: Buffer,
     snapshotId: Buffer,
     prevSnapshotId: Buffer | null,
     date: Date,

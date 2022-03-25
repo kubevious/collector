@@ -10,6 +10,7 @@ import { RegistryState, RegistryBundleState } from '@kubevious/state-registry';
 // import { RegistryState } from '@kubevious/helpers/dist/registry-state';
 // import { RegistryBundleState } from '@kubevious/helpers/dist/registry-bundle-state';
 import { ProcessorBuilder, ProcessorInfo, Handler as ProcessorHandler } from './builder';
+import { ExecutionContext as RuleEngineExecutionContext } from '@kubevious/helper-rule-engine';
 
 import { Context } from '../context';
 import { ProcessingTrackerScoper } from '@kubevious/helper-backend';
@@ -90,7 +91,15 @@ export class SnapshotProcessor
                     });
                 })
                 .then(() => {
-                    return bundle!;
+                    const ruleEngineResult: RuleEngineExecutionContext = {
+                        rules: {},
+                        markers: {}
+                    }
+
+                    return {
+                        bundle: bundle!,
+                        ruleEngineResult: ruleEngineResult
+                    }
                 })
         });
     }
