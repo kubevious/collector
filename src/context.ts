@@ -31,6 +31,7 @@ import { Executor } from './app/executor/executor'
 
 import { SnapshotPersistor } from './app/persistor';
 
+import { ConfigAccessor } from '@kubevious/data-models';
 
 import VERSION from './version'
 
@@ -57,6 +58,8 @@ export class Context
     private _debugObjectLogger: DebugObjectLogger;
 
     private _executor : Executor;
+
+    private _configAccessor : ConfigAccessor;
 
     // private _markerAccessor: MarkerAccessor;
     // private _markerCache: MarkerCache;
@@ -105,6 +108,8 @@ export class Context
         // this._ruleEngine = new RuleEngine(this, this.database.dataStore);
 
         // this._historySnapshotReader = new HistorySnapshotReader(this.logger, this._dataStore.driver);
+
+        this._configAccessor = new ConfigAccessor(this._dataStore.dataStore, this._dataStore.config);
 
         this._snapshotProcessor = new SnapshotProcessor(this);
         this._snapshotPersistor = new SnapshotPersistor(this);
@@ -184,6 +189,10 @@ export class Context
 
     get debugObjectLogger() {
         return this._debugObjectLogger;
+    }
+
+    get configAccessor() {
+        return this._configAccessor ;
     }
 
     // get markerAccessor() {

@@ -24,8 +24,3 @@ export interface SnapshotPersistorOutputData {
     deltaMarkerItems: DeltaAction<MarkerItemsRow>[],
 }
 
-
-export const LATEST_SNAPSHOT_CONFIG_NAME = 'LATEST_SNAPSHOT';
-export interface LatestSnapshotIdConfig  {
-    snapshot_id: string;
-}

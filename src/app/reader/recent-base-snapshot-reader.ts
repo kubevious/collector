@@ -8,7 +8,6 @@ import { DBSnapshotProcessableData } from './types'
 
 import * as BufferUtils from '@kubevious/helpers/dist/buffer-utils';
 import { SnapshotReader } from './snapshot-reader';
-import { LatestSnapshotIdConfig, LATEST_SNAPSHOT_CONFIG_NAME } from '../persistor/types';
 
 export class RecentBaseSnapshotReader
 {
@@ -24,23 +23,17 @@ export class RecentBaseSnapshotReader
     query() : Promise<DBSnapshotProcessableData | null>
     {
         return this._queryLatestSnapshot()
-            .then(latestSnapshotConfig => {
-                this._logger.warn("LATEST_CONFIG: ", latestSnapshotConfig);
+            .then(latestSnapshotId => {
 
-
-                if (!latestSnapshotConfig) {
+                if (!latestSnapshotId) {
                     this._logger.warn("No Latest Snapshot")
                     return null;
                 }
-                if (!latestSnapshotConfig.snapshot_id) {
-                    this._logger.warn("No Latest Snapshot ID");
-                    return null;
-                }
 
-                this._logger.info("Latest Snapshot: %s", latestSnapshotConfig.snapshot_id)
+                this._logger.info("Latest Snapshot: %s", latestSnapshotId)
 
                 const reader = new SnapshotReader(this._logger, this._context, {
-                    snapshotId: BufferUtils.fromStr(latestSnapshotConfig.snapshot_id)
+                    snapshotId: BufferUtils.fromStr(latestSnapshotId)
                 })
 
                 return reader.queryProcessableData();
@@ -50,7 +43,7 @@ export class RecentBaseSnapshotReader
 
     private _queryLatestSnapshot()
     {
-        return this._context.dataStore.getConfig<LatestSnapshotIdConfig | null>(LATEST_SNAPSHOT_CONFIG_NAME, null);
+        return this._context.configAccessor.getLatestSnapshotId();
     }
 
 }

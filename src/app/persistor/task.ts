@@ -5,7 +5,7 @@ import { Promise } from 'the-promise';
 import { ProcessingTrackerScoper } from '@kubevious/helper-backend';
 import { Context } from '../../context'
 
-import { LatestSnapshotIdConfig, LATEST_SNAPSHOT_CONFIG_NAME, SnapshotPersistorOutputData, SnapshotPersistorTarget } from './types'
+import { SnapshotPersistorOutputData, SnapshotPersistorTarget } from './types'
 import { ITableAccessor, ITableDriver, MySqlDriver } from '@kubevious/easy-data-store';
 
 import { ConfigItem } from '../executor/persistable-snapshot';
@@ -229,11 +229,9 @@ export class SnapshotPersistorTask
     {
         return tracker.scope("persist-index", (innerTracker) => {
 
-            const valueObj : LatestSnapshotIdConfig = {
-                snapshot_id: BufferUtils.toStr(this._target.snapshotId)
-            };
-    
-            return this._context.dataStore.setConfig(LATEST_SNAPSHOT_CONFIG_NAME, valueObj);
+            const snapshotId = BufferUtils.toStr(this._target.snapshotId);
+            return this._context.configAccessor.setLatestSnapshotId(snapshotId);
+
         });
     }
 

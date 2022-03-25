@@ -15,7 +15,6 @@ import { ConfigAccessors, prepareConfig } from '@kubevious/data-models/dist/mode
 import { SnapshotsAccessors, prepareSnapshots } from '@kubevious/data-models/dist/models/snapshots'
 import { RuleEngineAccessors, prepareRuleEngine } from '@kubevious/data-models/dist/models/rule_engine'
 
-const DB_SCHEMA_CONFIG_KEY = 'DB_SCHEMA';
 const TARGET_DB_VERSION : number = 9;
 
 const DB_NAME = process.env.MYSQL_DB;
@@ -194,25 +193,6 @@ export class Database
             })
     }
 
-
-    public getConfig<T>(name: string, defaultValue: T)
-    {
-        return this._dataStore.table(this._config.Config)
-            .queryOne({ key: name })
-            .then(result => {
-                if (!result) {
-                    return defaultValue;
-                }
-                return result.value! as T;
-            });
-    }
-
-    public setConfig<T>(name: string, value: T)
-    {
-        return this._dataStore.table(this._config.Config)
-            .create({ key: name, value: value });
-    }
-
     private _onDbMigrate()
     {
         this._logger.info("[_onDbMigrate] ...");
@@ -296,10 +276,7 @@ export class Database
                     return 0;
                 }
 
-                return this.getConfig(DB_SCHEMA_CONFIG_KEY, { version: 0 })
-                    .then(result => {
-                        return result.version;
-                    });
+                return this._context.configAccessor.getDBSchemaVersion();
             })
             ;
     }
@@ -308,10 +285,6 @@ export class Database
     {
         this._logger.info("[_setDbVersion] version: %s", version);
 
-        const valueObj = {
-            version: version
-        };
-
-        return this.setConfig(DB_SCHEMA_CONFIG_KEY, valueObj);
+        return this._context.configAccessor.setDBSchemaVersion(version);
     }
 }
