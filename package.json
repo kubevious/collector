@@ -21,7 +21,7 @@
   },
   "homepage": "https://github.com/kubevious/collector",
   "dependencies": {
-    "@kubevious/data-models": "^1.0.3",
+    "@kubevious/data-models": "^1.0.5",
     "@kubevious/easy-data-store": "^1.0.11",
     "@kubevious/entity-meta": "^1.0.56",
     "@kubevious/helper-backend": "^1.0.38",
@@ -68,7 +68,7 @@
     "@kubevious/helper-rule-engine": "^1.0.21",
     "@kubevious/worldvious-client": "^1.0.6",
     "@kubevious/entity-meta": "^1.0.56",
-    "@kubevious/data-models": "^1.0.3",
+    "@kubevious/data-models": "^1.0.5",
     "@kubevious/ui-middleware": "^1.0.43"
   }
 }

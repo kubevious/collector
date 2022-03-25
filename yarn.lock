@@ -64,10 +64,10 @@
   resolved "https://registry.yarnpkg.com/@humanwhocodes/object-schema/-/object-schema-1.2.1.tgz#b520529ec21d8e5945a1851dfd1c32e94e39ff45"
   integrity sha512-ZnQMnLV4e7hDlUvw8H+U8ASL02SS2Gn6+9Ac3wGGLIe7+je2AeAOxPY+izIPJDfFDb7eDjev0Us8MO1iFRN8hA==
 
-"@kubevious/data-models@^1.0.3":
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/@kubevious/data-models/-/data-models-1.0.3.tgz#5a6e839773060ea66c8f292581db4abf5dcd4347"
-  integrity sha512-lf+nPgyohXIE80hNWfWKvLtUpFwx3rskPW9M+yEjPVFb0f7BJFytKgH4wwxOr4+w8uq7MQeuuy9P0BfbDXNeww==
+"@kubevious/data-models@^1.0.5":
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/@kubevious/data-models/-/data-models-1.0.5.tgz#2e58d050e9d5984909b2e8e336a2a8db5ca35745"
+  integrity sha512-LXmGb2UfRfrvObSclWkYXxgfyYShzdeDTg3VZ9CW1ZBJiU8W7g/ctrWgZ06b+D86uqMYQTvnd3Q48BIZenbDVA==
   dependencies:
     "@kubevious/easy-data-store" "^1.0.11"
     the-lodash "^2.0.9"

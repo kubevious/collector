@@ -5,7 +5,7 @@ import { Promise } from 'the-promise';
 import { ProcessingTrackerScoper } from '@kubevious/helper-backend';
 import { Context } from '../../context'
 
-import { SnapshotPersistorOutputData, SnapshotPersistorTarget } from './types'
+import { LatestSnapshotIdConfig, LATEST_SNAPSHOT_CONFIG_NAME, SnapshotPersistorOutputData, SnapshotPersistorTarget } from './types'
 import { ITableAccessor, ITableDriver, MySqlDriver } from '@kubevious/easy-data-store';
 
 import { ConfigItem } from '../executor/persistable-snapshot';
@@ -60,8 +60,8 @@ export class SnapshotPersistorTask
         this.logger.info("[execute] count %s", this._target.snapshot.snapItemCount);
 
         const tables = [
+            this._context.dataStore.config.Config,
             this._context.dataStore.snapshots.SnapshotConfigs,
-            // this._context.dataStore.snapshots.ClusterLatestSnapshot,
             this._context.dataStore.snapshots.SnapItems,
             this._context.dataStore.snapshots.DiffItems,
             this._context.dataStore.snapshots.DeltaItems,
@@ -227,16 +227,14 @@ export class SnapshotPersistorTask
 
     private _persistSnapshotIndex(tracker: ProcessingTrackerScoper)
     {
-        // TODO: FIX ME
-        // return tracker.scope("persist-index", (innerTracker) => {
+        return tracker.scope("persist-index", (innerTracker) => {
 
-        //     return this._dataStore.table(this._context.dataStore.snapshots.ClusterLatestSnapshot)
-        //         .create({ 
-        //             snapshot_id: this._target.snapshotId,
-        //             date: this._target.date
-        //         });
-
-        // });
+            const valueObj : LatestSnapshotIdConfig = {
+                snapshot_id: BufferUtils.toStr(this._target.snapshotId)
+            };
+    
+            return this._context.dataStore.setConfig(LATEST_SNAPSHOT_CONFIG_NAME, valueObj);
+        });
     }
 
     private _persistSnapshotItems(tracker: ProcessingTrackerScoper)

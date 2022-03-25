@@ -28,6 +28,7 @@ import { SnapshotPersistorOutputData, SnapshotPersistorTarget } from '../persist
 // import { SearchEnginePersistorTarget } from '../search-engine/types';
 import { SnapshotsRow } from '@kubevious/data-models/dist/models/snapshots';
 import { ValidationConfig } from '@kubevious/entity-meta';
+import { RecentBaseSnapshotReader } from '../reader/recent-base-snapshot-reader';
 
 export class ExecutorTask
 {
@@ -162,8 +163,35 @@ export class ExecutorTask
     {
         return tracker.scope("query-base-snapshot", (innerTracker) => {
 
-            this._latestSnapshot = new DBSnapshot(null, new Date());
-            this._latestSummary = newDeltaSummary();
+
+            const reader = new RecentBaseSnapshotReader(this.logger, this._context);
+            return reader.query()
+                .then(result => {
+                    if (!result) {
+                        this.logger.info("[_queryBaseSnapshot] No Base Snapshot found.");
+                    } else {
+                        this._baseSnapshot = result.baseSnapshot!;
+                        this._latestSnapshot = result.snapshot;
+                        this._latestSummary = result.summary;
+
+                        if (this._baseSnapshot) {
+                            this.logger.info("[_queryBaseSnapshot] Base Snapshot: %s, size: %s", BufferUtils.toStr(this._baseSnapshot!.snapshotId!), this._baseSnapshot!.count);
+                        }
+                        this.logger.info("[_queryBaseSnapshot] Latest Snapshot: %s, size: %s", BufferUtils.toStr(this._latestSnapshot!.snapshotId!), this._latestSnapshot!.count);
+                    }
+
+                    if (!this._latestSnapshot) {
+                        this._latestSnapshot = new DBSnapshot(null, new Date());
+                    }
+
+                    if (!this._latestSummary) {
+                        this._latestSummary = newDeltaSummary();
+                    }
+
+                });
+
+            // this._latestSnapshot = new DBSnapshot(null, new Date());
+            // this._latestSummary = newDeltaSummary();
 
         });
     }

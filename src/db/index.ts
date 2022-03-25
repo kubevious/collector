@@ -11,12 +11,14 @@ import { Context } from '../context' ;
 
 import { MigratorArgs, MigratorBuilder, MigratorInfo, SqlBuilder } from './migration';
 
+import { ConfigAccessors, prepareConfig } from '@kubevious/data-models/dist/models/config'
 import { SnapshotsAccessors, prepareSnapshots } from '@kubevious/data-models/dist/models/snapshots'
 import { RuleEngineAccessors, prepareRuleEngine } from '@kubevious/data-models/dist/models/rule_engine'
 
+const DB_SCHEMA_CONFIG_KEY = 'DB_SCHEMA';
 const TARGET_DB_VERSION : number = 9;
 
-const DB_NAME = 'kubevious';
+const DB_NAME = process.env.MYSQL_DB;
 
 export class Database
 {
@@ -29,6 +31,7 @@ export class Database
     private _driver? : MySqlDriver;
     private _statements : Record<string, MySqlStatement> = {};
 
+    private _config : ConfigAccessors;
     private _snapshots : SnapshotsAccessors;
     private _ruleEngine : RuleEngineAccessors;
 
@@ -42,6 +45,7 @@ export class Database
 
         this._dataStore = new DataStore(logger.sublogger("DataStore"), false);
 
+        this._config = prepareConfig(this._dataStore);
         this._snapshots = prepareSnapshots(this._dataStore);
         this._ruleEngine = prepareRuleEngine(this._dataStore);
 
@@ -61,6 +65,10 @@ export class Database
 
     get isConnected() {
         return this._driver?.isConnected ?? false;
+    }
+
+    get config() {
+        return this._config;
     }
 
     get snapshots() {
@@ -186,6 +194,25 @@ export class Database
             })
     }
 
+
+    public getConfig<T>(name: string, defaultValue: T)
+    {
+        return this._dataStore.table(this._config.Config)
+            .queryOne({ key: name })
+            .then(result => {
+                if (!result) {
+                    return defaultValue;
+                }
+                return result.value! as T;
+            });
+    }
+
+    public setConfig<T>(name: string, value: T)
+    {
+        return this._dataStore.table(this._config.Config)
+            .create({ key: name, value: value });
+    }
+
     private _onDbMigrate()
     {
         this._logger.info("[_onDbMigrate] ...");
@@ -252,6 +279,14 @@ export class Database
             })
     }
 
+    private _tableExists(name: string)
+    {
+        return this.driver.executeSql(`SHOW TABLES LIKE '${name}';`)
+            .then(result => {
+                return result.length > 0;
+            })
+    }
+
     private _getDbVersion()
     {
         return this._tableExists('config')
@@ -260,24 +295,13 @@ export class Database
                     this.logger.warn('[_getDbVersion] Config table does not exist.');
                     return 0;
                 }
-                return this.driver.executeSql('SELECT `value` FROM `config` WHERE `key` = "DB_SCHEMA"')
-                    .then((result: any[]) => {
-                        const value = _.head(result);
-                        if (value) {
-                            return value.value.version || 0;
-                        }
-                        return 0;
-                    })
+
+                return this.getConfig(DB_SCHEMA_CONFIG_KEY, { version: 0 })
+                    .then(result => {
+                        return result.version;
+                    });
             })
             ;
-    }
-
-    private _tableExists(name: string)
-    {
-        return this.driver.executeSql(`SHOW TABLES LIKE '${name}';`)
-            .then(result => {
-                return result.length > 0;
-            })
     }
 
     private _setDbVersion(version: number)
@@ -288,8 +312,6 @@ export class Database
             version: version
         };
 
-        return this.driver.executeSql('INSERT INTO `config` (`key`, `value`) VALUES ("DB_SCHEMA", ?) ON DUPLICATE KEY UPDATE `value` = ?',
-            [valueObj, valueObj])
-            ;
+        return this.setConfig(DB_SCHEMA_CONFIG_KEY, valueObj);
     }
 }

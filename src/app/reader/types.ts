@@ -27,3 +27,8 @@ export interface DBSnapshotProcessableData
     snapshot: DBSnapshot,
     summary: DeltaSummary
 }
+
+
+export interface SnapshotReaderTarget {
+    snapshotId: Buffer,
+}
