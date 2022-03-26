@@ -9,9 +9,10 @@ import { ITableAccessor } from '@kubevious/easy-data-store';
 import { DBSnapshotProcessableData, SnapshotReaderTarget } from './types'
 import { DBSnapshot } from './snapshot'
 
-import * as BufferUtils from '@kubevious/helpers/dist/buffer-utils';
+import { BufferUtils } from '@kubevious/data-models';
+import { UuidUtils } from '@kubevious/data-models';
+
 import { DeltaSummary } from '../summary/types';
-import { getPartFromDatedUUIDBuf } from '@kubevious/data-models'
 
 export class SnapshotReader
 {
@@ -35,7 +36,7 @@ export class SnapshotReader
 
         this._dataStore = context.dataStore.dataStore;
 
-        this._partId = getPartFromDatedUUIDBuf(target.snapshotId);
+        this._partId = UuidUtils.getPartFromDatedUUIDBuf(target.snapshotId);
     }
 
     queryProcessableData() : Promise<DBSnapshotProcessableData | null>
@@ -140,7 +141,7 @@ export class SnapshotReader
 
     private _querySnapshotItems(snapshotId: Buffer)
     {
-        const partId = getPartFromDatedUUIDBuf(snapshotId);
+        const partId = UuidUtils.getPartFromDatedUUIDBuf(snapshotId);
         return this._dataStore.table(this._context.dataStore.snapshots.SnapItems)
             .queryMany({
                 part: partId,
@@ -150,7 +151,7 @@ export class SnapshotReader
 
     private _queryDiffItems(snapshotId: Buffer)
     {
-        const partId = getPartFromDatedUUIDBuf(snapshotId);
+        const partId = UuidUtils.getPartFromDatedUUIDBuf(snapshotId);
         return this._dataStore.table(this._context.dataStore.snapshots.DiffItems)
             .queryMany({
                 part: partId,

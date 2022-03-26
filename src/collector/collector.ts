@@ -4,11 +4,11 @@ import { ILogger } from 'the-logger' ;
 
 import moment from 'moment';
 
-import * as DateUtils from '@kubevious/helpers/dist/date-utils';
+import { DateUtils } from '@kubevious/data-models';
 
 import { K8sConfig, extractK8sConfigId } from '@kubevious/helper-logic-processor';
 
-import * as UuidUtils from '@kubevious/data-models/dist/utils/uuid-utils'
+import { UuidUtils } from '@kubevious/data-models';
 
 import { ReportableSnapshotItem, ResponseReportSnapshot, ResponseReportSnapshotItems } from '@kubevious/helpers/dist/reportable/types';
 

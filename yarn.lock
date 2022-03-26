@@ -64,12 +64,13 @@
   resolved "https://registry.yarnpkg.com/@humanwhocodes/object-schema/-/object-schema-1.2.1.tgz#b520529ec21d8e5945a1851dfd1c32e94e39ff45"
   integrity sha512-ZnQMnLV4e7hDlUvw8H+U8ASL02SS2Gn6+9Ac3wGGLIe7+je2AeAOxPY+izIPJDfFDb7eDjev0Us8MO1iFRN8hA==
 
-"@kubevious/data-models@^1.0.6":
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/@kubevious/data-models/-/data-models-1.0.6.tgz#e253b0f786b28409df9c9851d44575522a574ecc"
-  integrity sha512-+hLHPdkoliBbcka4sqr0WNqTJrxYCBq6y5ScyRfzHvBgVHMNs7oojbaLikeVxJDh18W+pYYsMrobBHIJyV7Ssw==
+"@kubevious/data-models@^1.0.11":
+  version "1.0.11"
+  resolved "https://registry.yarnpkg.com/@kubevious/data-models/-/data-models-1.0.11.tgz#6e2efe3fcdead551eae32f487e8c3f8794c91080"
+  integrity sha512-BZ0DKSwtnJEwiWowFkLubZYmKNd7EnWc0a7dobvfAexQ52hDL07I1InLLjQkEvoR5L656lZtspHNW1+kDI8fCA==
   dependencies:
     "@kubevious/easy-data-store" "^1.0.11"
+    moment "^2.29.1"
     the-lodash "^2.0.9"
     the-logger "^2.0.14"
     the-promise "^2.0.13"
@@ -145,10 +146,10 @@
     the-logger "^2.0.9"
     the-promise "^2.0.13"
 
-"@kubevious/helper-rule-engine@^1.0.21":
-  version "1.0.21"
-  resolved "https://registry.yarnpkg.com/@kubevious/helper-rule-engine/-/helper-rule-engine-1.0.21.tgz#3b0eaa7e27981dca3e9402cd42358943fabaebcc"
-  integrity sha512-O+CT79C512FrtsEtWUW09uaRaKB7P6VpvDOFxsYgUflPUOMaAEk/QRM8PTr1OFAppryoT8JH6qVSlTgKRm6ZwQ==
+"@kubevious/helper-rule-engine@^1.0.22":
+  version "1.0.22"
+  resolved "https://registry.yarnpkg.com/@kubevious/helper-rule-engine/-/helper-rule-engine-1.0.22.tgz#690e824ade9565174cebb98ad55a9da1d76a7313"
+  integrity sha512-IiYykI7C78xHPtry4kGq5PrE88Q9A6r2yjK5nLBzMeEiohs9L3Jgzh1CQJ1PzXfT+Y6zQ1A4cMfD9a7SO5/VSw==
   dependencies:
     "@kubevious/helpers" "^1.0.62"
     "@kubevious/kubik" "^1.0.14"

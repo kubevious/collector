@@ -47,7 +47,6 @@ export class Database
         this._config = prepareConfig(this._dataStore);
         this._snapshots = prepareSnapshots(this._dataStore);
         this._ruleEngine = prepareRuleEngine(this._dataStore);
-
     }
 
     get logger() {

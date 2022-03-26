@@ -15,7 +15,7 @@ import { ExecutorTaskTarget } from './types';
 import { DBSnapshot } from '../reader/snapshot';
 import { PersistableSnapshot } from './persistable-snapshot';
 
-import * as BufferUtils from '@kubevious/helpers/dist/buffer-utils';
+import { BufferUtils } from '@kubevious/data-models';
 // import { SnapshotReader } from '../reader/snapshot-reader';
 import { SummaryCalculator } from '../summary/calculator';
 import { DeltaSummary, newDeltaSummary, TimelineSummary } from '../summary/types';

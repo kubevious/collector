@@ -2,8 +2,8 @@ import _ from 'the-lodash';
 import { Promise } from 'the-promise';
 import { ILogger } from 'the-logger' ;
 
-import * as DateUtils from '@kubevious/helpers/dist/date-utils';
-import * as BufferUtils from '@kubevious/helpers/dist/buffer-utils';
+import { DateUtils } from '@kubevious/data-models';
+import { BufferUtils } from '@kubevious/data-models';
 import { SnapshotReader } from '@kubevious/helpers/dist/history';
 
 

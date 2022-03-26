@@ -6,7 +6,7 @@
 
 // import { DataStore } from '@kubevious/easy-data-store';
 
-import * as HashUtils from '@kubevious/helpers/dist/hash-utils'
+import { HashUtils } from '@kubevious/data-models';
 // import { RuleObject } from './types';
 
 import { RulesRow } from '@kubevious/data-models/dist/models/rule_engine';

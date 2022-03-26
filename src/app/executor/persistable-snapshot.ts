@@ -1,8 +1,8 @@
 import _ from 'the-lodash';
 
 import { BundledNodeConfig } from '@kubevious/helpers/dist/registry-bundle-state';
-import * as BufferUtils from '@kubevious/helpers/dist/buffer-utils';
-import * as HashUtils from "@kubevious/helpers/dist/hash-utils"
+import { BufferUtils } from '@kubevious/data-models';
+import { HashUtils } from '@kubevious/data-models';
 
 import { DBSnapshot, makeKey } from '../reader/snapshot';
 

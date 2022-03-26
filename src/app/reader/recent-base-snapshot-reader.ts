@@ -6,7 +6,7 @@ import { Context } from '../../context'
 
 import { DBSnapshotProcessableData } from './types'
 
-import * as BufferUtils from '@kubevious/helpers/dist/buffer-utils';
+import { BufferUtils } from '@kubevious/data-models';
 import { SnapshotReader } from './snapshot-reader';
 
 export class RecentBaseSnapshotReader

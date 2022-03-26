@@ -10,10 +10,10 @@ import { ITableAccessor, ITableDriver, MySqlDriver } from '@kubevious/easy-data-
 
 import { ConfigItem } from '../executor/persistable-snapshot';
 import { DeltaItemsRow, DiffItemsRow, SnapItemsRow, SnapshotsRow } from '@kubevious/data-models/dist/models/snapshots';
-import { MarkerItemsRow, RuleClusterStatusRow, RuleItemsRow, RuleLogsRow } from '@kubevious/data-models/dist/models/rule_engine';
+import { MarkerItemsRow, RuleStatusRow, RuleItemsRow, RuleLogsRow } from '@kubevious/data-models/dist/models/rule_engine';
 
-import * as UuidUtils from '@kubevious/data-models/dist/utils/uuid-utils';
-import * as BufferUtils from '@kubevious/helpers/dist/buffer-utils';
+import { UuidUtils } from '@kubevious/data-models';
+import { BufferUtils } from '@kubevious/data-models';
 
 
 export class SnapshotPersistorTask
@@ -322,7 +322,7 @@ export class SnapshotPersistorTask
     {
         return tracker.scope("rule-statuses", () => {
 
-            const targetItems : Partial<RuleClusterStatusRow>[] = [];
+            const targetItems : Partial<RuleStatusRow>[] = [];
 
             for(const ruleObj of this._target.rules)
             {
@@ -336,7 +336,7 @@ export class SnapshotPersistorTask
                 })
             }
 
-            return this._dataStore.table(this._context.dataStore.ruleEngine.RuleClusterStatuses)
+            return this._dataStore.table(this._context.dataStore.ruleEngine.RuleStatuses)
                 .synchronizer()
                 .execute(targetItems);
         });

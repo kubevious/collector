@@ -1,8 +1,8 @@
 import _ from 'the-lodash';
 import { DBSnapshotItemKey } from './types'
-import * as BufferUtils from '@kubevious/helpers/dist/buffer-utils';
 import { SnapItemsRow } from '@kubevious/data-models/dist/models/snapshots';
-import { getPartFromDatedUUIDBuf } from '@kubevious/data-models/dist';
+import { UuidUtils } from '@kubevious/data-models';
+import { BufferUtils } from '@kubevious/data-models';
 
 export class DBSnapshot
 {
@@ -15,7 +15,7 @@ export class DBSnapshot
     {
         this._snapshotId = snapshotId;
         if (snapshotId) {
-            this._partitionId = getPartFromDatedUUIDBuf(snapshotId);
+            this._partitionId = UuidUtils.getPartFromDatedUUIDBuf(snapshotId);
         } else {
             this._partitionId = null;
         }
