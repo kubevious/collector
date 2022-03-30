@@ -1,7 +1,8 @@
 import _ from 'the-lodash';
 import { Promise } from 'the-promise';
-import { makeDbRule } from '../../rule/rule-accessor';
 import { RuleConfig } from '@kubevious/ui-middleware/dist/services/rule';
+import { RulesRow } from '@kubevious/data-models/dist/models/rule_engine';
+import { HashUtils } from '@kubevious/data-models';
 
 import { Migrator } from '../migration';
 
@@ -129,3 +130,18 @@ if (value) {
 `mark("public-application")`
     }
 ]
+
+// TODO: Move to data-models lib. Reuse in backend.
+export function makeDbRule(rule: RuleConfig) : Partial<RulesRow>
+{
+    const ruleObj : Partial<RulesRow> = {
+        name: rule.name,
+        enabled: rule.enabled,
+        target: rule.target,
+        script: rule.script,
+        date: new Date()
+    }
+    const hash = HashUtils.calculateObjectHash(ruleObj);
+    ruleObj.hash = hash;
+    return ruleObj;
+}

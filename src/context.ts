@@ -8,22 +8,14 @@ import { FacadeRegistry } from './facade/registry';
 import { SearchEngine } from './search/engine';
 import { AutocompleteBuilder } from './search/autocomplete-builder';
 import { Database } from './db';
-// import { HistoryProcessor } from './history/processor';
-// import { HistoryCleanupProcessor } from './history/history-cleanup-processor';
 import { Registry } from './registry/registry';
 import { Collector } from './collector/collector';
 import { DebugObjectLogger } from './utils/debug-object-logger';
-// import { MarkerAccessor } from './rule/marker-accessor';
-// import { MarkerCache } from './rule/marker-cache';
-// import { RuleAccessor } from './rule/rule-accessor';
-// import { RuleCache } from './rule/rule-cache';
-// import { RuleEngine } from './rule/rule-engine';
 import { SnapshotProcessor } from './snapshot-processor';
 import { WorldviousClient } from '@kubevious/worldvious-client';
 
 import { WebServer } from './server';
 
-// import { SnapshotReader as HistorySnapshotReader } from '@kubevious/helpers/dist/history/snapshot-reader';
 import { SeriesResampler } from '@kubevious/helpers/dist/history/series-resampler';
 
 import { ParserLoader } from '@kubevious/helper-logic-processor';
@@ -61,14 +53,6 @@ export class Context
 
     private _configAccessor : ConfigAccessor;
 
-    // private _markerAccessor: MarkerAccessor;
-    // private _markerCache: MarkerCache;
-    // private _ruleAccessor: RuleAccessor;
-    // private _ruleCache: RuleCache;
-    // private _ruleEngine: RuleEngine;
-
-    // private _historySnapshotReader: HistorySnapshotReader;
-
     private _snapshotProcessor: SnapshotProcessor;
     private _snapshotPersistor : SnapshotPersistor;
 
@@ -100,14 +84,6 @@ export class Context
         this._executor = new Executor(this);
 
         this._debugObjectLogger = new DebugObjectLogger(this);
-
-        // this._markerAccessor = new MarkerAccessor(this, this.database.dataStore);
-        // this._markerCache = new MarkerCache(this);
-        // this._ruleAccessor = new RuleAccessor(this, this.database.dataStore);
-        // this._ruleCache = new RuleCache(this);
-        // this._ruleEngine = new RuleEngine(this, this.database.dataStore);
-
-        // this._historySnapshotReader = new HistorySnapshotReader(this.logger, this._dataStore.driver);
 
         this._configAccessor = new ConfigAccessor(this._dataStore.dataStore, this._dataStore.config);
 
@@ -175,10 +151,6 @@ export class Context
         return this._searchEngine;
     }
 
-    // get historyProcessor() {
-    //     return this._historyProcessor;
-    // }
-
     get collector() {
         return this._collector;
     }
@@ -195,30 +167,6 @@ export class Context
         return this._configAccessor ;
     }
 
-    // get markerAccessor() {
-    //     return this._markerAccessor;
-    // }
-
-    // get markerCache() {
-    //     return this._markerCache;
-    // }
-
-    // get ruleAccessor() {
-    //     return this._ruleAccessor;
-    // }
-
-    // get ruleCache() {
-    //     return this._ruleCache;
-    // }
-
-    // get ruleEngine() {
-    //     return this._ruleEngine;
-    // }
-
-    // get historySnapshotReader() {
-    //     return this._historySnapshotReader;
-    // }
-
     get snapshotProcessor() {
         return this._snapshotProcessor;
     }
@@ -226,10 +174,6 @@ export class Context
     get snapshotPersistor() {
         return this._snapshotPersistor;
     }
-
-    // get historyCleanupProcessor() {
-    //     return this._historyCleanupProcessor;
-    // }
 
     get worldvious() {
         return this._worldvious;
