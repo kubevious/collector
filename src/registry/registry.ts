@@ -2,8 +2,7 @@ import _ from 'the-lodash';
 import { Promise } from 'the-promise';
 import { ILogger } from 'the-logger' ;
 
-import { RegistryState } from '@kubevious/helpers/dist/registry-state';
-import { RegistryBundleState } from '@kubevious/helpers/dist/registry-bundle-state';
+import { RegistryState, RegistryBundleState } from '@kubevious/state-registry';
 
 import { Context } from '../context';
 

@@ -5,8 +5,6 @@ import { Promise } from 'the-promise';
 import { Backend } from '@kubevious/helper-backend'
 
 import { FacadeRegistry } from './facade/registry';
-import { SearchEngine } from './search/engine';
-import { AutocompleteBuilder } from './search/autocomplete-builder';
 import { Database } from './db';
 import { Registry } from './registry/registry';
 import { Collector } from './collector/collector';
@@ -16,7 +14,7 @@ import { WorldviousClient } from '@kubevious/worldvious-client';
 
 import { WebServer } from './server';
 
-import { SeriesResampler } from '@kubevious/helpers/dist/history/series-resampler';
+import { SeriesResampler } from '@kubevious/data-models';
 
 import { ParserLoader } from '@kubevious/helper-logic-processor';
 import { Executor } from './app/executor/executor'
@@ -38,12 +36,11 @@ export class Context
     private _server: WebServer;
 
     private _dataStore: Database;
-    private _searchEngine: SearchEngine;
-    // private _historyProcessor: HistoryProcessor;
+    // private _searchEngine: SearchEngine;
 
     private _collector: Collector;
     private _registry: Registry;
-    private _autocompleteBuilder: AutocompleteBuilder;
+    // private _autocompleteBuilder: AutocompleteBuilder;
 
     private _facadeRegistry: FacadeRegistry;
 
@@ -74,11 +71,11 @@ export class Context
         this._parserLoader = new ParserLoader(this.logger);
 
         this._dataStore = new Database(this._logger, this);
-        this._searchEngine = new SearchEngine(this);
+        // this._searchEngine = new SearchEngine(this);
         // this._historyProcessor = new HistoryProcessor(this);
         this._collector = new Collector(this);
         this._registry = new Registry(this);
-        this._autocompleteBuilder = new AutocompleteBuilder(this);
+        // this._autocompleteBuilder = new AutocompleteBuilder(this);
 
         this._facadeRegistry = new FacadeRegistry(this);
         this._executor = new Executor(this);
@@ -93,7 +90,7 @@ export class Context
         // this._historyCleanupProcessor = new HistoryCleanupProcessor(this);
 
         this._seriesResamplerHelper = new SeriesResampler(200)
-            .column("changes", _.max)
+            .column("changes", x => _.max(x) ?? 0)
             .column("error", _.mean)
             .column("warn", _.mean)
             ;
@@ -147,10 +144,6 @@ export class Context
         return this._facadeRegistry;
     }
 
-    get searchEngine() {
-        return this._searchEngine;
-    }
-
     get collector() {
         return this._collector;
     }
@@ -183,9 +176,13 @@ export class Context
         return this._seriesResamplerHelper;
     }
 
-    get autocompleteBuilder() {
-        return this._autocompleteBuilder;
-    }
+    // get searchEngine() {
+    //     return this._searchEngine;
+    // }
+
+    // get autocompleteBuilder() {
+        // return this._autocompleteBuilder;
+    // }
 
     get parserLoader() {
         return this._parserLoader;

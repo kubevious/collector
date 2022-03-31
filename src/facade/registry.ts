@@ -10,6 +10,8 @@ import { ConcreteRegistry } from '../concrete/registry';
 import { JobDampener } from '@kubevious/helpers';
 
 
+
+
 export class FacadeRegistry
 {
     private _logger : ILogger;
@@ -55,11 +57,7 @@ export class FacadeRegistry
 
         return this._context.executor.process({ 
             registry: registry,
-            snapshotId: registry.snapshotId,
-            date: registry.date
          });
-         
-
     }
 
     private _runFinalize(bundle : RegistryBundleState, tracker: ProcessingTrackerScoper)

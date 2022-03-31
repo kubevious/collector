@@ -1,6 +1,6 @@
 import { ILogger } from "the-logger";
 import { Context } from "../context";
-import { ProcessingTracker } from "@kubevious/helpers/dist/processing-tracker";
+import { ProcessingTracker } from "@kubevious/helper-backend";
 import { RegistryState } from "@kubevious/state-registry";
 
 export function Processor() : ProcessorBuilder

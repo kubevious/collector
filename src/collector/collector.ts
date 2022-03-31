@@ -28,7 +28,7 @@ export class Collector
     private _snapshots : Record<string, CollectorSnapshotInfo> = {};
     private _snapshotsToProcess : Record<string, boolean> = {};
 
-    private _parserVersion? : string;
+    private _agentVersion? : string;
     private _currentMetric : MetricItem | null = null;
     private _latestMetric : MetricItem | null = null;
     private _recentDurations : number[] = [];
@@ -49,9 +49,9 @@ export class Collector
         return this._logger;
     }
     
-    newSnapshot(date: Date, parserVersion: string, baseSnapshotId?: string) : ResponseReportSnapshot
+    newSnapshot(date: Date, agentVersion: string, baseSnapshotId?: string) : ResponseReportSnapshot
     {
-        this._parserVersion = parserVersion;
+        this._agentVersion = agentVersion;
 
         const canAccept = this._canAcceptNewSnapshot();
         if (!canAccept.success) {
@@ -83,6 +83,7 @@ export class Collector
             id: id,
             reportDate: new Date(),
             date: date,
+            agentVersion: agentVersion,
             metric: metric,
             item_hashes: item_hashes
         };
@@ -147,7 +148,11 @@ export class Collector
             this.logger.info("[_acceptSnapshot] item count: %s", _.keys(snapshotInfo.item_hashes).length);
             this.logger.info("[_acceptSnapshot] metric: ", snapshotInfo.metric);
             
-            const registry = new ConcreteRegistry(this._logger, snapshotInfo.id, snapshotInfo.date);
+            const registry = new ConcreteRegistry(this._logger,
+                snapshotInfo.id,
+                snapshotInfo.date,
+                snapshotInfo.agentVersion);
+                
             for(const itemHash of _.keys(snapshotInfo.item_hashes))
             {
                 const configHash = snapshotInfo.item_hashes[itemHash];
@@ -249,7 +254,7 @@ export class Collector
         metrics.push({
             category: 'Collector',
             name: 'Parser Version',
-            value: this._parserVersion ? this._parserVersion : 'unknown'
+            value: this._agentVersion ? this._agentVersion : 'unknown'
         })
 
         metrics.push({

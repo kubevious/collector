@@ -355,6 +355,7 @@ export class ExecutorTask
             const target : SnapshotPersistorTarget = {
                 snapshotId: this._target.snapshotId,
                 date: this._snapshotDate,
+                agentVersion: this._target.registry.agentVersion,
                 snapshot: this._finalPersistableSnapshot!,
                 latestDelta: this._latestSnapshotDelta!,
                 summary: this._deltaSummary!,

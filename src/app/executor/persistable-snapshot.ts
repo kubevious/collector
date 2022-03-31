@@ -1,6 +1,6 @@
 import _ from 'the-lodash';
 
-import { BundledNodeConfig } from '@kubevious/helpers/dist/registry-bundle-state';
+import { BundledNodeConfig } from '@kubevious/state-registry/dist/registry-bundle-state';
 import { BufferUtils } from '@kubevious/data-models';
 import { HashUtils } from '@kubevious/data-models';
 

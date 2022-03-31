@@ -1,5 +1,3 @@
-import { ReportableSnapshotItem } from "@kubevious/helpers/dist/reportable/types";
-
 export interface MetricItem
 {
     origDate: Date,
@@ -11,9 +9,10 @@ export interface MetricItem
 
 export interface CollectorSnapshotInfo
 {
-    id: string
-    reportDate: Date
-    date: Date
-    metric: MetricItem
-    item_hashes: Record<string, string>
+    id: string,
+    reportDate: Date,
+    date: Date,
+    agentVersion: string,
+    metric: MetricItem,
+    item_hashes: Record<string, string>,
 }

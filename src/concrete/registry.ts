@@ -11,15 +11,17 @@ export class ConcreteRegistry implements IConcreteRegistry
     private _logger : ILogger;
     private _snapshotId: string;
     private _date : Date;
+    private _agentVersion: string;
 
     private _flatItemsDict : Record<any, ConcreteItem> = {};
     private _itemsKindDict : Record<any, Record<any, ConcreteItem>> = {};
 
-    constructor(logger: ILogger, snapshotId: string, date: Date)
+    constructor(logger: ILogger, snapshotId: string, date: Date, agentVersion: string)
     {
         this._logger = logger.sublogger("ConcreteRegistry");
         this._snapshotId = snapshotId;
-        this._date =  date
+        this._date =  date;
+        this._agentVersion = agentVersion;
     }
 
     get logger() : ILogger {
@@ -32,6 +34,10 @@ export class ConcreteRegistry implements IConcreteRegistry
 
     get date() {
         return this._date;
+    }
+
+    get agentVersion() {
+        return this._agentVersion;
     }
 
     get allItems() : ConcreteItem[] {

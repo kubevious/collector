@@ -15,6 +15,8 @@ import { MarkerItemsRow, RuleStatusRow, RuleItemsRow, RuleLogsRow } from '@kubev
 import { UuidUtils } from '@kubevious/data-models';
 import { BufferUtils } from '@kubevious/data-models';
 
+import { LatestSnapshotInfo } from '@kubevious/data-models/dist/accessors/config-accessor';
+
 
 export class SnapshotPersistorTask
 {
@@ -32,7 +34,6 @@ export class SnapshotPersistorTask
     private _outputData : SnapshotPersistorOutputData;
 
     
-
     constructor(logger: ILogger, context : Context, target: SnapshotPersistorTarget)
     {
         this._context = context;
@@ -229,8 +230,12 @@ export class SnapshotPersistorTask
     {
         return tracker.scope("persist-index", (innerTracker) => {
 
-            const snapshotId = BufferUtils.toStr(this._target.snapshotId);
-            return this._context.configAccessor.setLatestSnapshotId(snapshotId);
+            const info: LatestSnapshotInfo = {
+                snapshot_id: BufferUtils.toStr(this._target.snapshotId),
+                date: this._target.date.toISOString(),
+                agent_version: this._target.agentVersion
+            }
+            return this._context.configAccessor.setLatestSnapshotInfo(info);
 
         });
     }

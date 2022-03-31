@@ -11,6 +11,7 @@ export interface SnapshotPersistorTarget {
     snapshotId: Buffer,
     prevSnapshotId: Buffer | null,
     date: Date,
+    agentVersion: string,
     snapshot: PersistableSnapshot,
     latestDelta: PersistableSnapshot,
     summary: DeltaSummary,

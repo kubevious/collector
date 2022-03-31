@@ -46,15 +46,15 @@ export class Executor
     {
         const myTarget : ExecutorTaskTarget = {
             registry: target.registry,
-            snapshotId: BufferUtils.fromStr(target.snapshotId),
-            date: target.date
+            snapshotId: BufferUtils.fromStr(target.registry.snapshotId),
+            date: target.registry.date,
         }
         return myTarget;
     }
 
     private _markComplete(target: ExecutorTarget)
     {
-        this._context.collector.completeSnapshotProcessing(target.snapshotId);
+        this._context.collector.completeSnapshotProcessing(target.registry.snapshotId);
     }
 
 }
