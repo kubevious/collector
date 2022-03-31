@@ -1,5 +1,5 @@
 import _ from 'the-lodash';
-import { Promise } from 'the-promise';
+import { Promise, Resolvable } from 'the-promise';
 import { ILogger } from 'the-logger' ;
 
 import moment from 'moment';
@@ -11,6 +11,7 @@ import { K8sConfig, extractK8sConfigId } from '@kubevious/helper-logic-processor
 import { UuidUtils } from '@kubevious/data-models';
 
 import { ReportableSnapshotItem, ResponseReportSnapshot, ResponseReportSnapshotItems } from '@kubevious/helpers/dist/reportable/types';
+import { CollectorReportingInfo } from '@kubevious/data-models/dist/accessors/config-accessor';
 
 import { CollectorSnapshotInfo, MetricItem } from './types';
 import { ConcreteRegistry } from '../concrete/registry';
@@ -49,7 +50,7 @@ export class Collector
         return this._logger;
     }
     
-    newSnapshot(date: Date, agentVersion: string, baseSnapshotId?: string) : ResponseReportSnapshot
+    newSnapshot(date: Date, agentVersion: string, baseSnapshotId?: string) : Resolvable<ResponseReportSnapshot>
     {
         this._agentVersion = agentVersion;
 
@@ -79,7 +80,7 @@ export class Collector
 
         const id = UuidUtils.newDatedUUID();
 
-        this._snapshots[id] = {
+        const snapshotInfo : CollectorSnapshotInfo = {
             id: id,
             reportDate: new Date(),
             date: date,
@@ -88,11 +89,25 @@ export class Collector
             item_hashes: item_hashes
         };
 
+        this._snapshots[id] = snapshotInfo;
+
         this._lastReportDate = moment();
 
-        return {
-            id: id
-        };
+        return Promise.resolve()
+            .then(() => {
+                const reportingInfo : CollectorReportingInfo = {
+                    snapshot_id: snapshotInfo.id,
+                    date: snapshotInfo.date.toISOString(),
+                    agent_version: snapshotInfo.agentVersion,
+                };
+                return this._context.configAccessor.setCollectorReportingInfo(reportingInfo);
+            })
+            .then(() => {
+                return {
+                    id: id
+                };
+            })
+
     }
 
     acceptSnapshotItems(snapshotId: string, items: ReportableSnapshotItem[])

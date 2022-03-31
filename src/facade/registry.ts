@@ -1,16 +1,15 @@
 import _ from 'the-lodash';
-import { Promise } from 'the-promise';
+import { Promise, Resolvable } from 'the-promise';
 import { ILogger } from 'the-logger' ;
 
 import { Context } from '../context';
-import { LogicProcessor } from '@kubevious/helper-logic-processor'
 import { RegistryBundleState } from '@kubevious/state-registry';
 import { ProcessingTrackerScoper } from '@kubevious/helper-backend';
 import { ConcreteRegistry } from '../concrete/registry';
 import { JobDampener } from '@kubevious/helpers';
+import { JobDampenerState } from '@kubevious/helpers/dist/job-dampener';
 
-
-
+import { CollectorStateInfo } from '@kubevious/data-models/dist/accessors/config-accessor';
 
 export class FacadeRegistry
 {
@@ -18,7 +17,8 @@ export class FacadeRegistry
     private _context : Context
 
     private _jobDampener : JobDampener<ConcreteRegistry>;
-    
+    private _latestDampenerState: JobDampenerState | null = null;
+
     constructor(context : Context)
     {
         this._context = context;
@@ -29,8 +29,10 @@ export class FacadeRegistry
             this._processConcreteRegistry.bind(this),
             {
                 queueSize: 1,
-                rescheduleTimeoutMs: 1000
+                rescheduleTimeoutMs: 1000,
+                stateMonitorCb: this._jobDampenerStateMonitorCb.bind(this)
             });
+
     }
 
     get logger() {
@@ -43,6 +45,11 @@ export class FacadeRegistry
 
     get jobDampener() {
         return this._jobDampener;
+    }
+
+    init()
+    {
+        this._context.dataStore.onConnect(this._onDbConnect.bind(this));
     }
 
     acceptConcreteRegistry(registry: ConcreteRegistry)
@@ -58,6 +65,36 @@ export class FacadeRegistry
         return this._context.executor.process({ 
             registry: registry,
          });
+    }
+
+    private _jobDampenerStateMonitorCb(state: JobDampenerState)
+    {
+        this._logger.info("[_jobDampenerStateMonitorCb] ", state);
+        this._latestDampenerState = state;
+
+        if (this._context.dataStore.isConnected) {
+            return this._persistLatestJobProcessorState();
+        } else {
+            this._logger.info("[_jobDampenerStateMonitorCb] NOT YET CONNECTED TO DB");
+        }
+    }
+
+    private _onDbConnect()
+    {
+        return this._persistLatestJobProcessorState();
+    }
+
+    private _persistLatestJobProcessorState()
+    {
+        if (!this._latestDampenerState) {
+            return;
+        }
+
+        const info: CollectorStateInfo = {
+            snapshots_in_queue: this._latestDampenerState.totalJobs ?? 0
+        }
+
+        return this._context.configAccessor.setCollectorStateConfig(info);
     }
 
     private _runFinalize(bundle : RegistryBundleState, tracker: ProcessingTrackerScoper)

@@ -6,7 +6,6 @@ import { ILogger } from 'the-logger';
 
 import { RequestReportSnapshot, RequestReportSnapshotItems, RequestActivateSnapshot, RequestReportConfig } from '@kubevious/helpers/dist/reportable/types'
 
-
 export default function (router: Router, context: Context, logger: ILogger) {
 
     router.url('/api/v1/collect');

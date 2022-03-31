@@ -107,6 +107,8 @@ export class Context
 
         backend.stage("setup-db", () => this._dataStore.init());
 
+        backend.stage("setup-facade", () => this._facadeRegistry.init());
+
         backend.stage("setup-parser-loader", () => this._parserLoader.init());
 
         backend.stage("setup-server", () => this._server.run());
