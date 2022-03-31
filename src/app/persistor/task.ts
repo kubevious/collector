@@ -70,9 +70,7 @@ export class SnapshotPersistorTask
             this._context.dataStore.snapshots.Timeline
         ];
 
-        const tableNames = tables.map(x => x.tableName);
-
-        return this._context.dataStore.executeInTransaction(tableNames, () => {
+        return this._context.dataStore.executeInTransaction(tables, () => {
             return Promise.resolve()
                 .then(() => this._preparePartitions(tracker))
                 .then(() => {

@@ -28,6 +28,7 @@
     "@kubevious/helper-logic-processor": "^1.0.70",
     "@kubevious/helper-rule-engine": "^1.0.22",
     "@kubevious/helpers": "^1.0.63",
+    "@kubevious/http-client": "^1.0.19",
     "@kubevious/ui-middleware": "^1.0.43",
     "@kubevious/websocket-server": "^1.0.26",
     "@kubevious/worldvious-client": "^1.0.6",

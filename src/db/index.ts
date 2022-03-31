@@ -5,7 +5,7 @@ import { ILogger } from 'the-logger' ;
 import * as fs from 'fs';
 import * as Path from 'path';
 
-import { DataStore, MySqlDriver, MySqlStatement } from '@kubevious/easy-data-store';
+import { DataStore, DataStoreTableAccessor, MySqlDriver, MySqlStatement } from '@kubevious/easy-data-store';
 
 import { Context } from '../context' ;
 
@@ -14,6 +14,7 @@ import { MigratorArgs, MigratorBuilder, MigratorInfo, SqlBuilder } from './migra
 import { ConfigAccessors, prepareConfig } from '@kubevious/data-models/dist/models/config'
 import { SnapshotsAccessors, prepareSnapshots } from '@kubevious/data-models/dist/models/snapshots'
 import { RuleEngineAccessors, prepareRuleEngine } from '@kubevious/data-models/dist/models/rule_engine'
+import { MetaTable } from '@kubevious/easy-data-store/dist/meta/meta-table';
 
 const TARGET_DB_VERSION : number = 9;
 
@@ -106,10 +107,14 @@ export class Database
         return this._driver!.onConnect(cb);
     }
 
-
-    executeInTransaction<T>(tableNames: string[], cb: () => Resolvable<T>): Promise<any>
+    table<TRow>(accessor: DataStoreTableAccessor<TRow>)
     {
-        return this._dataStore.executeInTransaction(tableNames, cb);
+        return this._dataStore.table(accessor);
+    }
+
+    executeInTransaction<T = any>(tables: (string | DataStoreTableAccessor<any>)[], cb: () => Resolvable<T>): Promise<any>
+    {
+        return this._dataStore.executeInTransaction(tables, cb);
     }
 
     init()

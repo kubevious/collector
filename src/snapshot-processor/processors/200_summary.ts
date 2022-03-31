@@ -240,7 +240,7 @@ export default Processor()
 
         function getInfraCapacity(key: string)
         {
-            const item = state.findByDn('root/infra-[Infrastructure]/nodes-[Nodes]');
+            const item = state.findByDn('root/infra/nodes');
             if (!item) {
                 return '?';
             }
@@ -254,13 +254,13 @@ export default Processor()
 
         function getStorageCapacity(key: string)
         {
-            const item = state.findByDn('root/infra-[Infrastructure]/storage-[Storage]');
+            const item = state.findByDn('root/infra/storage');
             if (!item) {
-                return '?';
+                return 0;
             }
             const config = item.getProperties('properties');
             if (!config) {
-                return '?';
+                return 0;
             }
             const value = config.config[key];
             return value;

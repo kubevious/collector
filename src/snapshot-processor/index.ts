@@ -7,10 +7,8 @@ import * as Path from 'path';
 
 import { RegistryState, RegistryBundleState } from '@kubevious/state-registry';
 
-// import { RegistryState } from '@kubevious/helpers/dist/registry-state';
-// import { RegistryBundleState } from '@kubevious/helpers/dist/registry-bundle-state';
-import { ProcessorBuilder, ProcessorInfo, Handler as ProcessorHandler } from './builder';
-import { ExecutionContext as RuleEngineExecutionContext } from '@kubevious/helper-rule-engine';
+import { ProcessorBuilder, ProcessorInfo, Handler as ProcessorHandler, HandlerArgs } from './builder';
+import { ExecutionContext as RuleEngineExecutionContext, RuleObject } from '@kubevious/helper-rule-engine';
 
 import { Context } from '../context';
 import { ProcessingTrackerScoper } from '@kubevious/helper-backend';
@@ -78,24 +76,24 @@ export class SnapshotProcessor
         }
     }
 
-    process(registryState : RegistryState, tracker: ProcessingTrackerScoper, extraParams?: any)
+    process(registryState : RegistryState, rules: RuleObject[], tracker: ProcessingTrackerScoper)
     {
         return tracker.scope("SnapshotProcessor::process", (innerTracker) => {
 
+            const ruleEngineResult: RuleEngineExecutionContext = {
+                rules: {},
+                markers: {}
+            }
+
             let bundle : RegistryBundleState | null = null;
             return Promise.resolve()
-                .then(() => this._runProcessors(registryState, extraParams, innerTracker))
+                .then(() => this._runProcessors(registryState, rules, ruleEngineResult, innerTracker))
                 .then(() => {
                     return innerTracker.scope("buildBundle", () => {
                         bundle = registryState!.buildBundle();
                     });
                 })
                 .then(() => {
-                    const ruleEngineResult: RuleEngineExecutionContext = {
-                        rules: {},
-                        markers: {}
-                    }
-
                     return {
                         bundle: bundle!,
                         ruleEngineResult: ruleEngineResult
@@ -104,24 +102,23 @@ export class SnapshotProcessor
         });
     }
 
-    private _runProcessors(registryState: RegistryState, extraParams: any, tracker : ProcessingTrackerScoper)
+    private _runProcessors(registryState: RegistryState,
+                           rules: RuleObject[],
+                           ruleEngineResult: RuleEngineExecutionContext,
+                           tracker : ProcessingTrackerScoper)
     {
         return tracker.scope("handlers", (procTracker) => {
             return Promise.serial(this._processors, processor => {
                 return procTracker.scope(processor.name, (innerTracker) => {
 
-                    let params;
-                    if (extraParams) {
-                        params = _.clone(extraParams);
-                    } else {
-                        params = {}
-                    }
-                    params = _.defaults(params, {
+                    const params : HandlerArgs = {
                         logger: this.logger,
                         context: this._context,
                         state: registryState,
+                        rules: rules,
+                        ruleEngineResult: ruleEngineResult,
                         tracker: innerTracker
-                    });
+                    };
                     
                     return processor.handler(params);
                 })

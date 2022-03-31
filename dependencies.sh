@@ -13,6 +13,7 @@ REPO_DEPENDENCIES=(
     "@kubevious/worldvious-client"
     "@kubevious/data-models"
     "@kubevious/ui-middleware"
+    "@kubevious/http-client"
 )
 
 FORCE_RESOLVE_DEPENDENCIES=(
@@ -28,4 +29,5 @@ FORCE_RESOLVE_DEPENDENCIES=(
     "@kubevious/worldvious-client"
     "@kubevious/data-models"
     "@kubevious/ui-middleware"
+    "@kubevious/http-client"
 )

@@ -5,4 +5,8 @@ export interface RuleObject {
     script: string;
 }
 
+export interface MarkerObject {
+    name: string;
+}
+
 export type RuleItem = Record<string, any>;

@@ -19,7 +19,8 @@ import { ConcreteRegistry } from '../concrete/registry';
 import { Context } from '../context';
 
 const SNAPSHOT_QUEUE_SIZE = 5;
-const SNAPSHOT_ACCEPT_DELAY_SECONDS = 3 * 60;
+
+const DEFAULT_REPORTING_DELAY_SECONDS = moment.duration(5, 'minute').asSeconds();
 
 export class Collector
 {
@@ -34,6 +35,8 @@ export class Collector
     private _latestMetric : MetricItem | null = null;
     private _recentDurations : number[] = [];
 
+    private _reportingDelay: number;
+
     private _configHashes : Record<string, any> = {};
 
     private _lastReportDate : moment.Moment | null = null;
@@ -44,6 +47,12 @@ export class Collector
         this._logger = context.logger.sublogger("Collector");
 
         this.logger.info("[constructed] ");
+
+        if (process.env.COLLECTOR_REPORT_DELAY_SEC) {
+            this._reportingDelay = parseInt(process.env.COLLECTOR_REPORT_DELAY_SEC);
+        } else {
+            this._reportingDelay = DEFAULT_REPORTING_DELAY_SECONDS;
+        }
     }
 
     get logger() {
@@ -249,7 +258,7 @@ export class Collector
         if (this._lastReportDate)
         {
             // this.logger.info("[_canAcceptNewSnapshot] Last Report Date: %s", this._lastReportDate.toISOString());
-            const nextAcceptDate = moment(this._lastReportDate).add(SNAPSHOT_ACCEPT_DELAY_SECONDS, "seconds");
+            const nextAcceptDate = moment(this._lastReportDate).add(this._reportingDelay, "seconds");
 
             const diff = nextAcceptDate.diff(moment(), "second");
 

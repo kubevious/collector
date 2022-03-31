@@ -24,6 +24,7 @@ import { SnapshotPersistor } from './app/persistor';
 import { ConfigAccessor } from '@kubevious/data-models';
 
 import VERSION from './version'
+import { WebSocketUpdater } from './app/websocket-updater/websocket-updater';
 
 export class Context
 {
@@ -59,6 +60,8 @@ export class Context
 
     private _parserLoader : ParserLoader;
 
+    private _webSocketUpdater : WebSocketUpdater;
+
     constructor(backend : Backend)
     {
         this._backend = backend;
@@ -87,6 +90,7 @@ export class Context
         this._snapshotProcessor = new SnapshotProcessor(this);
         this._snapshotPersistor = new SnapshotPersistor(this);
 
+        this._webSocketUpdater = new WebSocketUpdater(this);
         // this._historyCleanupProcessor = new HistoryCleanupProcessor(this);
 
         this._seriesResamplerHelper = new SeriesResampler(200)
@@ -176,6 +180,10 @@ export class Context
 
     get seriesResamplerHelper() {
         return this._seriesResamplerHelper;
+    }
+
+    get webSocketUpdater() {
+        return this._webSocketUpdater;
     }
 
     // get searchEngine() {

@@ -1,7 +1,8 @@
 import { ILogger } from "the-logger";
 import { Context } from "../context";
-import { ProcessingTracker } from "@kubevious/helper-backend";
+import { ProcessingTrackerScoper } from "@kubevious/helper-backend";
 import { RegistryState } from "@kubevious/state-registry";
+import { ExecutionContext as RuleEngineExecutionContext, RuleObject } from '@kubevious/helper-rule-engine';
 
 export function Processor() : ProcessorBuilder
 {
@@ -12,8 +13,10 @@ export interface HandlerArgs
 {
     logger : ILogger;
     state : RegistryState;
-    tracker : ProcessingTracker;
+    tracker : ProcessingTrackerScoper;
     context : Context;
+    rules: RuleObject[];
+    ruleEngineResult: RuleEngineExecutionContext;
 }
 
 export type Handler = (args: HandlerArgs) => any;
@@ -29,11 +32,6 @@ export class ProcessorBuilder
 {
     private _data : ProcessorInfo = { order: 0, isDisabled: false };
     
-    constructor()
-    {
-
-    }
-
     disable()
     {
         this._data.isDisabled = true;

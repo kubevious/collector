@@ -29,6 +29,7 @@ import { SnapshotPersistorOutputData, SnapshotPersistorTarget } from '../persist
 import { SnapshotsRow } from '@kubevious/data-models/dist/models/snapshots';
 import { ValidationConfig } from '@kubevious/entity-meta';
 import { RecentBaseSnapshotReader } from '../reader/recent-base-snapshot-reader';
+import { MarkerObject, RuleObject } from '../../rule/types';
 
 export class ExecutorTask
 {
@@ -50,8 +51,8 @@ export class ExecutorTask
     private _timelineSummary : TimelineSummary | null = null;
 
     private _registryState? : RegistryState;
-    // private _rules? : RuleObject[];
-    // private _markers? : MarkerObject[];
+    private _rules? : RuleObject[];
+    private _markers? : MarkerObject[];
     private _ruleEngineResult?: RuleEngineExecutionContext;
 
     private _snapshotPersistorOutput?: SnapshotPersistorOutputData;
@@ -81,8 +82,9 @@ export class ExecutorTask
 
         return Promise.resolve()
             .then(() => this._queryValidatorConfig(tracker))
-            .then(() => this._executeLogicProcessor(tracker))
             .then(() => this._queryRules(tracker))
+            .then(() => this._queryMarkers(tracker))
+            .then(() => this._executeLogicProcessor(tracker))
             .then(() => this._executeSnapshotProcessor(tracker))
             .then(() => this._queryBaseSnapshot(tracker))
             .then(() => this._checkBaseSnapshot(tracker))
@@ -92,6 +94,7 @@ export class ExecutorTask
             .then(() => this._calculateSummary(tracker))
             .then(() => this._persist(tracker))
             .then(() => this._notifyWebSocket(tracker))
+            .then(() => {})
             ;
     }
 
@@ -99,6 +102,47 @@ export class ExecutorTask
     private _queryValidatorConfig(tracker: ProcessingTrackerScoper)
     {
         return tracker.scope("query-validator-config", (innerTracker) => {
+
+            
+
+        });
+    }
+
+    private _queryRules(tracker: ProcessingTrackerScoper)
+    {
+        return tracker.scope("query-rules", (innerTracker) => {
+
+            return this._context.dataStore.table(this._context.dataStore.ruleEngine.Rules)
+                .queryMany({ enabled: true })
+                .then(rows => {
+                    this._rules = rows.map(x => {
+                        const rule : RuleObject = {
+                            name: x.name!,
+                            hash: x.hash!,
+                            target: x.target!,
+                            script: x.script!
+                        }
+                        return rule;
+                    });
+                });
+
+        });
+    }
+
+    private _queryMarkers(tracker: ProcessingTrackerScoper)
+    {
+        return tracker.scope("query-markers", (innerTracker) => {
+
+            return this._context.dataStore.table(this._context.dataStore.ruleEngine.Markers)
+                .queryMany({})
+                .then(rows => {
+                    this._markers = rows.map(x => {
+                        const marker : MarkerObject = {
+                            name: x.name!
+                        }
+                        return marker;
+                    });
+                });
 
         });
     }
@@ -127,18 +171,11 @@ export class ExecutorTask
         });
     }
 
-    private _queryRules(tracker: ProcessingTrackerScoper)
-    {
-        return tracker.scope("query-rules", (innerTracker) => {
-
-        });
-    }
-
     private _executeSnapshotProcessor(tracker: ProcessingTrackerScoper)
     {
         return tracker.scope("run-snapshot-processor", (innerTracker) => {
             
-            return this._context.snapshotProcessor.process(this._registryState!, tracker)
+            return this._context.snapshotProcessor.process(this._registryState!, this._rules!, tracker)
                 .then(result => {
                     this.logger.info("SnapshotProcessor Complete.")
                     this.logger.info("SnapshotProcessor Count: %s", result.bundle.getCount())
@@ -149,7 +186,6 @@ export class ExecutorTask
                     this.logger.info("SnapshotProcessor Target Item Count: %s", this._targetSnapshot.snapItemCount)
                     this.logger.info("SnapshotProcessor Target Partition: %s", this._targetSnapshot.partitionId)
 
-                    // TODO: 
                     this._ruleEngineResult = result.ruleEngineResult;
 
                     return Promise.resolve()
@@ -189,9 +225,6 @@ export class ExecutorTask
                     }
 
                 });
-
-            // this._latestSnapshot = new DBSnapshot(null, new Date());
-            // this._latestSummary = newDeltaSummary();
 
         });
     }
@@ -361,7 +394,7 @@ export class ExecutorTask
                 summary: this._deltaSummary!,
                 timelineSummary: this._timelineSummary!,
                 prevSnapshotId: this._latestSnapshot ? this._latestSnapshot!.snapshotId : null,
-                rules: [], //this._rules!,
+                rules: this._rules!,
                 ruleEngineResult: this._ruleEngineResult!
             }
 
@@ -379,16 +412,10 @@ export class ExecutorTask
     {
         return tracker.scope("notify-websocket", (innerTracker) => {
 
+            return this._context.webSocketUpdater.notifyNewSnapshot();
+            
         });
     }
-
-    private _markComplete(tracker: ProcessingTrackerScoper)
-    {
-        return tracker.scope("", (innerTracker) => {
-
-        });
-    }
-
 
     private _produceSnapshot(state: RegistryBundleState) : PersistableSnapshot
     {
