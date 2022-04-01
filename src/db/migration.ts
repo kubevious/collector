@@ -80,7 +80,7 @@ export class SqlBuilder
 
         sql += `) ENGINE=InnoDB CHARACTER SET utf8 COLLATE utf8_general_ci `;
 
-        if (params)
+        if (params.isPartitioned)
         {
             sql += 
                 "PARTITION BY RANGE (`part`) ( " +

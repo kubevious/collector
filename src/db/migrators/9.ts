@@ -95,6 +95,14 @@ export default Migrator()
             isPartitioned: true
         }),
 
+        sql.createTable('validators', {
+            columns: [
+                { name: 'validator_id', type: 'VARCHAR(256)', options: 'NOT NULL', isPrimaryKey: true },
+                { name: 'setting', type: 'VARCHAR(64)', options: 'NOT NULL' },
+            ]
+        }),
+
+
         ];
 
         return Promise.serial(queries, x => executeSql(x));
