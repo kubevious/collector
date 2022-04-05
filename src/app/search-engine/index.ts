@@ -3,14 +3,13 @@ import _ from 'the-lodash';
 import { Promise } from 'the-promise';
 
 import { ProcessingTrackerScoper } from '@kubevious/helper-backend';
-
 import { Context } from '../../context'
 
-import { SnapshotPersistorTask } from './task';
-import { SnapshotPersistorTarget } from './types';
+import { SearchEnginePersistorTask } from './task';
+import { SearchEnginePersistorTarget } from './types';
 
 
-export class SnapshotPersistor
+export class SearchEnginePersistor
 {
     private _logger : ILogger;
     private _context : Context;
@@ -18,16 +17,16 @@ export class SnapshotPersistor
     constructor(context : Context)
     {
         this._context = context;
-        this._logger = context.logger.sublogger('SnapshotPersistor');
+        this._logger = context.logger.sublogger('SearchEnginePersistor');
     }
 
     get logger() {
         return this._logger;
     }
 
-    persist(target: SnapshotPersistorTarget, tracker: ProcessingTrackerScoper) : Promise<any>
+    persist(target: SearchEnginePersistorTarget, tracker: ProcessingTrackerScoper) : Promise<any>
     {
-        const task = new SnapshotPersistorTask(this._logger, this._context, target);
+        const task = new SearchEnginePersistorTask(this._logger, this._context, target);
         return task.execute(tracker);
     }
 }

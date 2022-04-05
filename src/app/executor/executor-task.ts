@@ -11,22 +11,15 @@ import { RegistryState, RegistryBundleState, SnapshotConfigKind } from '@kubevio
 import { Context } from '../../context'
 import { ExecutorTaskTarget } from './types';
 
-// import { RecentBaseSnapshotReader } from '../reader/recent-base-snapshot-reader';
 import { DBSnapshot } from '../reader/snapshot';
 import { PersistableSnapshot } from './persistable-snapshot';
 
 import { BufferUtils } from '@kubevious/data-models';
-// import { SnapshotReader } from '../reader/snapshot-reader';
 import { SummaryCalculator } from '../summary/calculator';
 import { DeltaSummary, newDeltaSummary, TimelineSummary } from '../summary/types';
-// import { SnapshotResult } from '../fetcher/types';
-// import { RulesEngineFetcher } from '../rule-engine/fetcher';
-// import { MarkerObject, RuleObject } from '../rule-engine/types';
 import { ExecutionContext as RuleEngineExecutionContext } from '@kubevious/helper-rule-engine';
 import { SnapshotPersistorOutputData, SnapshotPersistorTarget } from '../persistor/types';
-// import { WebSocketNotifierTarget } from '../websocket-notifier/types';
-// import { SearchEnginePersistorTarget } from '../search-engine/types';
-import { SnapshotsRow } from '@kubevious/data-models/dist/models/snapshots';
+import { SearchEnginePersistorTarget } from '../search-engine/types';
 import { ValidationConfig } from '@kubevious/entity-meta';
 import { RecentBaseSnapshotReader } from '../reader/recent-base-snapshot-reader';
 import { MarkerObject, RuleObject } from '../../rule/types';
@@ -58,7 +51,6 @@ export class ExecutorTask
     private _snapshotPersistorOutput?: SnapshotPersistorOutputData;
     private _snapshotDate: Date = new Date();
 
-    private _snapshotRow? : Partial<SnapshotsRow>;
     private _validationConfig: Partial<ValidationConfig> = {};
 
     constructor(logger: ILogger, context : Context, target: ExecutorTaskTarget)
@@ -92,6 +84,7 @@ export class ExecutorTask
             .then(() => this._processBaseDeltaSnapshot(tracker))
             .then(() => this._producePersistableSnapshot(tracker))
             .then(() => this._calculateSummary(tracker))
+            .then(() => this._processSearch(tracker))
             .then(() => this._persist(tracker))
             .then(() => this._notifyWebSocket(tracker))
             .then(() => {})
@@ -103,7 +96,11 @@ export class ExecutorTask
     {
         return tracker.scope("query-validator-config", (innerTracker) => {
 
-            
+            return this._context.dataStore.table(this._context.dataStore.validation.Validator)
+                .queryMany({})
+                .then(rows => {
+                    this._validationConfig = _.makeDict(rows, x => x.validator_id!, x => x.setting!);
+                })
 
         });
     }
@@ -153,10 +150,10 @@ export class ExecutorTask
 
             const logicProcessor = new LogicProcessor(
                 this.logger,
-                tracker,
+                innerTracker,
                 this._context.parserLoader,
                 this._target.registry,
-                {});
+                this._validationConfig);
             return logicProcessor.process()
                 .then(registryState => {
                     this.logger.info("[_executeLogicProcessor] End. Node Count: %s", registryState.getNodes().length)
@@ -173,9 +170,9 @@ export class ExecutorTask
 
     private _executeSnapshotProcessor(tracker: ProcessingTrackerScoper)
     {
-        return tracker.scope("run-snapshot-processor", (innerTracker) => {
+        return tracker.scope("snapshot-processor", (innerTracker) => {
             
-            return this._context.snapshotProcessor.process(this._registryState!, this._rules!, tracker)
+            return this._context.snapshotProcessor.process(this._registryState!, this._rules!, innerTracker)
                 .then(result => {
                     this.logger.info("SnapshotProcessor Complete.")
                     this.logger.info("SnapshotProcessor Count: %s", result.bundle.getCount())
@@ -381,6 +378,19 @@ export class ExecutorTask
         });
     }
 
+    private _processSearch(tracker: ProcessingTrackerScoper)
+    {
+        return tracker.scope("process-search", (innerTracker) => {
+
+            const target : SearchEnginePersistorTarget = {
+                stateBundle: this._targetBundleState!
+            }
+            return this._context.searchEnginePersistor.persist(target, innerTracker);
+
+        })
+    }
+    
+
     private _persist(tracker: ProcessingTrackerScoper)
     {
         return tracker.scope("persist", (innerTracker) => {
@@ -398,7 +408,7 @@ export class ExecutorTask
                 ruleEngineResult: this._ruleEngineResult!
             }
 
-            return this._context.snapshotPersistor.persist(target, tracker)
+            return this._context.snapshotPersistor.persist(target, innerTracker)
                 .then(result => {
                     this._snapshotPersistorOutput = result;
 

@@ -78,28 +78,25 @@ export class SnapshotProcessor
 
     process(registryState : RegistryState, rules: RuleObject[], tracker: ProcessingTrackerScoper)
     {
-        return tracker.scope("SnapshotProcessor::process", (innerTracker) => {
+        const ruleEngineResult: RuleEngineExecutionContext = {
+            rules: {},
+            markers: {}
+        }
 
-            const ruleEngineResult: RuleEngineExecutionContext = {
-                rules: {},
-                markers: {}
-            }
-
-            let bundle : RegistryBundleState | null = null;
-            return Promise.resolve()
-                .then(() => this._runProcessors(registryState, rules, ruleEngineResult, innerTracker))
-                .then(() => {
-                    return innerTracker.scope("buildBundle", () => {
-                        bundle = registryState!.buildBundle();
-                    });
-                })
-                .then(() => {
-                    return {
-                        bundle: bundle!,
-                        ruleEngineResult: ruleEngineResult
-                    }
-                })
-        });
+        let bundle : RegistryBundleState | null = null;
+        return Promise.resolve()
+            .then(() => this._runProcessors(registryState, rules, ruleEngineResult, tracker))
+            .then(() => {
+                return tracker.scope("buildBundle", () => {
+                    bundle = registryState!.buildBundle();
+                });
+            })
+            .then(() => {
+                return {
+                    bundle: bundle!,
+                    ruleEngineResult: ruleEngineResult
+                }
+            })
     }
 
     private _runProcessors(registryState: RegistryState,

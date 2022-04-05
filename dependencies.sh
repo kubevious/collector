@@ -14,6 +14,7 @@ REPO_DEPENDENCIES=(
     "@kubevious/data-models"
     "@kubevious/ui-middleware"
     "@kubevious/http-client"
+    "@kubevious/helper-redis"
 )
 
 FORCE_RESOLVE_DEPENDENCIES=(
@@ -30,4 +31,5 @@ FORCE_RESOLVE_DEPENDENCIES=(
     "@kubevious/data-models"
     "@kubevious/ui-middleware"
     "@kubevious/http-client"
+    "@kubevious/helper-redis"
 )

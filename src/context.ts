@@ -1,6 +1,4 @@
 import _ from 'the-lodash';
-import { ILogger } from 'the-logger';
-import { Promise } from 'the-promise';
 
 import { Backend } from '@kubevious/helper-backend'
 
@@ -12,6 +10,8 @@ import { DebugObjectLogger } from './utils/debug-object-logger';
 import { SnapshotProcessor } from './snapshot-processor';
 import { WorldviousClient } from '@kubevious/worldvious-client';
 
+import { RedisClient } from '@kubevious/helper-redis';
+
 import { WebServer } from './server';
 
 import { SeriesResampler } from '@kubevious/data-models';
@@ -22,6 +22,7 @@ import { Executor } from './app/executor/executor'
 import { SnapshotPersistor } from './app/persistor';
 
 import { ConfigAccessor } from '@kubevious/data-models';
+import { SearchEnginePersistor } from './app/search-engine';
 
 import VERSION from './version'
 import { WebSocketUpdater } from './app/websocket-updater/websocket-updater';
@@ -37,11 +38,10 @@ export class Context
     private _server: WebServer;
 
     private _dataStore: Database;
-    // private _searchEngine: SearchEngine;
+    private _redis : RedisClient;
 
     private _collector: Collector;
     private _registry: Registry;
-    // private _autocompleteBuilder: AutocompleteBuilder;
 
     private _facadeRegistry: FacadeRegistry;
 
@@ -61,6 +61,8 @@ export class Context
     private _parserLoader : ParserLoader;
 
     private _webSocketUpdater : WebSocketUpdater;
+    private _searchEnginePersistor : SearchEnginePersistor;
+
 
     constructor(backend : Backend)
     {
@@ -74,11 +76,10 @@ export class Context
         this._parserLoader = new ParserLoader(this.logger);
 
         this._dataStore = new Database(this._logger, this);
-        // this._searchEngine = new SearchEngine(this);
-        // this._historyProcessor = new HistoryProcessor(this);
+        this._redis = new RedisClient(this.logger.sublogger('Redis'));
+
         this._collector = new Collector(this);
         this._registry = new Registry(this);
-        // this._autocompleteBuilder = new AutocompleteBuilder(this);
 
         this._facadeRegistry = new FacadeRegistry(this);
         this._executor = new Executor(this);
@@ -92,6 +93,8 @@ export class Context
 
         this._webSocketUpdater = new WebSocketUpdater(this);
         // this._historyCleanupProcessor = new HistoryCleanupProcessor(this);
+
+        this._searchEnginePersistor = new SearchEnginePersistor(this);
 
         this._seriesResamplerHelper = new SeriesResampler(200)
             .column("changes", x => _.max(x) ?? 0)
@@ -110,6 +113,8 @@ export class Context
         backend.stage("setup-metrics-tracker", () => this._setupMetricsTracker());
 
         backend.stage("setup-db", () => this._dataStore.init());
+
+        backend.stage("redis", () => this._redis.run());
 
         backend.stage("setup-facade", () => this._facadeRegistry.init());
 
@@ -140,6 +145,10 @@ export class Context
 
     get dataStore() {
         return this._dataStore;
+    }
+
+    get redis() {
+        return this._redis;
     }
 
     get executor() : Executor {
@@ -186,13 +195,9 @@ export class Context
         return this._webSocketUpdater;
     }
 
-    // get searchEngine() {
-    //     return this._searchEngine;
-    // }
-
-    // get autocompleteBuilder() {
-        // return this._autocompleteBuilder;
-    // }
+    get searchEnginePersistor() { 
+        return this._searchEnginePersistor;
+    }
 
     get parserLoader() {
         return this._parserLoader;

@@ -14,7 +14,7 @@ import { MigratorArgs, MigratorBuilder, MigratorInfo, SqlBuilder } from './migra
 import { ConfigAccessors, prepareConfig } from '@kubevious/data-models/dist/models/config'
 import { SnapshotsAccessors, prepareSnapshots } from '@kubevious/data-models/dist/models/snapshots'
 import { RuleEngineAccessors, prepareRuleEngine } from '@kubevious/data-models/dist/models/rule_engine'
-import { MetaTable } from '@kubevious/easy-data-store/dist/meta/meta-table';
+import { ValidationAccessors, prepareValidation } from '@kubevious/data-models/dist/models/validation'
 
 const TARGET_DB_VERSION : number = 9;
 
@@ -34,6 +34,7 @@ export class Database
     private _config : ConfigAccessors;
     private _snapshots : SnapshotsAccessors;
     private _ruleEngine : RuleEngineAccessors;
+    private _validation : ValidationAccessors;
 
 
     constructor(logger : ILogger, context : Context)
@@ -48,6 +49,7 @@ export class Database
         this._config = prepareConfig(this._dataStore);
         this._snapshots = prepareSnapshots(this._dataStore);
         this._ruleEngine = prepareRuleEngine(this._dataStore);
+        this._validation = prepareValidation(this._dataStore);
     }
 
     get logger() {
@@ -76,6 +78,10 @@ export class Database
 
     get ruleEngine() {
         return this._ruleEngine;
+    }
+
+    get validation() {
+        return this._validation;
     }
 
     private _loadMigrators()
