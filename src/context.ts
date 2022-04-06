@@ -26,6 +26,7 @@ import { SearchEnginePersistor } from './app/search-engine';
 
 import VERSION from './version'
 import { WebSocketUpdater } from './app/websocket-updater/websocket-updater';
+import { BackendMetrics } from './app/backend-metrics';
 
 export class Context
 {
@@ -62,6 +63,7 @@ export class Context
 
     private _webSocketUpdater : WebSocketUpdater;
     private _searchEnginePersistor : SearchEnginePersistor;
+    private _backendMetrics : BackendMetrics;
 
 
     constructor(backend : Backend)
@@ -77,6 +79,8 @@ export class Context
 
         this._dataStore = new Database(this._logger, this);
         this._redis = new RedisClient(this.logger.sublogger('Redis'));
+
+        this._backendMetrics = new BackendMetrics(this);
 
         this._collector = new Collector(this);
         this._registry = new Registry(this);
@@ -201,6 +205,10 @@ export class Context
 
     get parserLoader() {
         return this._parserLoader;
+    }
+
+    get backendMetrics() {
+        return this._backendMetrics;
     }
 
     private _setupMetricsTracker()

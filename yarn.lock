@@ -148,10 +148,10 @@
     the-logger "^2.0.9"
     the-promise "^2.0.13"
 
-"@kubevious/helper-redis@^1.0.17":
-  version "1.0.17"
-  resolved "https://registry.yarnpkg.com/@kubevious/helper-redis/-/helper-redis-1.0.17.tgz#2a8c968320c0e83cc01c90c887effffd0a9a7f16"
-  integrity sha512-RaL3S4paX+tLx3/kZyOTm+GAZTZreK+MF3E86gFMpo2moYs5ekl91w7Ei0OJje8TgTATXCeBel0MvbWyRfNtGg==
+"@kubevious/helper-redis@^1.0.19":
+  version "1.0.19"
+  resolved "https://registry.yarnpkg.com/@kubevious/helper-redis/-/helper-redis-1.0.19.tgz#e07b3c16a367e4cd600cb4cc0d52428afb3bd3e7"
+  integrity sha512-SbHXJQa7cCwc/aWHG/+gLc76Frx6U4mu6YtUaUwe+OkeAKZC6j1zPFrS2XNKQj1wpTX6wifkrKtSBklWfMNkUQ==
   dependencies:
     dotenv "^14.3.2"
     ioredis "^4.28.3"
@@ -213,10 +213,10 @@
     the-logger "^2.0.14"
     the-promise "^2.0.13"
 
-"@kubevious/ui-middleware@^1.0.43", "@kubevious/ui-middleware@^1.0.46":
-  version "1.0.46"
-  resolved "https://registry.yarnpkg.com/@kubevious/ui-middleware/-/ui-middleware-1.0.46.tgz#10d8ca7739bbf32d44bf0158ea48a38b9a8124df"
-  integrity sha512-+vqrUrNL7QaJkQQkadI9IrBWNCFzt3kkrBcO6lIO/VT0TwpfVlwoVrnjHL8AifmKIgb4sb3fzA4JO4NVEunAkA==
+"@kubevious/ui-middleware@^1.0.43", "@kubevious/ui-middleware@^1.0.49":
+  version "1.0.49"
+  resolved "https://registry.yarnpkg.com/@kubevious/ui-middleware/-/ui-middleware-1.0.49.tgz#c32c7637f0576aade904def8f69ef916de240807"
+  integrity sha512-20t/0QBfOWvpCVFSooXgIduYM1UlsOv/KsktZjDoX+DV4IGa/RzmSIGZtMhVQOUgC/UPcvSNmILZ9pmDPVo/hQ==
   dependencies:
     "@kubevious/entity-meta" "^1.0.56"
     the-promise "^2.0.13"

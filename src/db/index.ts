@@ -65,7 +65,7 @@ export class Database
     }
 
     get isConnected() {
-        return this._driver?.isConnected ?? false;
+        return this._dataStore.isConnected;
     }
 
     get config() {

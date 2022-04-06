@@ -17,6 +17,7 @@ import { CollectorSnapshotInfo, MetricItem } from './types';
 import { ConcreteRegistry } from '../concrete/registry';
 
 import { Context } from '../context';
+import { BackendMetricItem } from '@kubevious/ui-middleware';
 
 const SNAPSHOT_QUEUE_SIZE = 5;
 
@@ -40,6 +41,7 @@ export class Collector
     private _configHashes : Record<string, any> = {};
 
     private _lastReportDate : moment.Moment | null = null;
+    private _counters : Counters ;
 
     constructor(context: Context)
     {
@@ -53,6 +55,13 @@ export class Collector
         } else {
             this._reportingDelay = DEFAULT_REPORTING_DELAY_SECONDS;
         }
+
+        this._counters = {
+            newSnapshotCount: 0,
+            activateSnapshotCount: 0,
+            itemsReportCount: 0,
+            reportConfigCount: 0,
+        };
     }
 
     get logger() {
@@ -112,6 +121,8 @@ export class Collector
                 return this._context.configAccessor.setCollectorReportingInfo(reportingInfo);
             })
             .then(() => {
+                this._counters.newSnapshotCount++;
+
                 return {
                     id: id
                 };
@@ -150,6 +161,8 @@ export class Collector
             response.needed_configs = missingHashes;
         }
 
+        this._counters.itemsReportCount++;
+
         return response;
     }
 
@@ -158,6 +171,8 @@ export class Collector
         if (_.keys(this._snapshotsToProcess).length > 0) {
             return RESPONSE_NEED_NEW_SNAPSHOT;
         }
+
+        this._counters.activateSnapshotCount++;
 
         return this._context.tracker.scope("collector::activateSnapshot", (tracker) => {
             const snapshotInfo = this._snapshots[snapshotId];
@@ -200,6 +215,8 @@ export class Collector
 
     storeConfig(hash: string, config: any)
     {
+        this._counters.reportConfigCount++;
+
         this._configHashes[hash] = config;
     }
 
@@ -273,7 +290,7 @@ export class Collector
 
     extractMetrics()
     {
-        const metrics : UserMetricItem[] = [];
+        const metrics : BackendMetricItem[] = [];
 
         metrics.push({
             category: 'Collector',
@@ -283,10 +300,34 @@ export class Collector
 
         metrics.push({
             category: 'Collector',
-            name: 'Recent Durations',
+            name: 'Recent Collection Durations',
             value: JSON.stringify(this._recentDurations)
         })
 
+        metrics.push({
+            category: 'Collector',
+            name: 'New Snapshot Counter',
+            value: this._counters.newSnapshotCount
+        })
+
+        metrics.push({
+            category: 'Collector',
+            name: 'Activate Snapshot Counter',
+            value: this._counters.activateSnapshotCount
+        })
+
+        metrics.push({
+            category: 'Collector',
+            name: 'Items Report Counter',
+            value: this._counters.itemsReportCount
+        })
+
+        metrics.push({
+            category: 'Collector',
+            name: 'Config Report Counter',
+            value: this._counters.reportConfigCount
+        })
+        
         if (this._currentMetric && !this._currentMetric.dateEnd) {
             metrics.push({
                 category: 'Collector',
@@ -362,10 +403,10 @@ const RESPONSE_NEED_NEW_SNAPSHOT = {
     new_snapshot: true
 };
 
-
-interface UserMetricItem
+interface Counters
 {
-    category: string,
-    name: string,
-    value: string | number | Date
+    newSnapshotCount: number;
+    activateSnapshotCount: number;
+    itemsReportCount: number;
+    reportConfigCount: number;
 }

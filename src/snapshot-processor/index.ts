@@ -7,7 +7,7 @@ import * as Path from 'path';
 
 import { RegistryState, RegistryBundleState } from '@kubevious/state-registry';
 
-import { ProcessorBuilder, ProcessorInfo, Handler as ProcessorHandler, HandlerArgs } from './builder';
+import { ProcessorBuilder, Handler as ProcessorHandler, HandlerArgs } from './builder';
 import { ExecutionContext as RuleEngineExecutionContext, RuleObject } from '@kubevious/helper-rule-engine';
 
 import { Context } from '../context';
@@ -92,6 +92,7 @@ export class SnapshotProcessor
                 });
             })
             .then(() => {
+              
                 return {
                     bundle: bundle!,
                     ruleEngineResult: ruleEngineResult
