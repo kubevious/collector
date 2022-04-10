@@ -23,6 +23,7 @@ import { SearchEnginePersistorTarget } from '../search-engine/types';
 import { ValidationConfig } from '@kubevious/entity-meta';
 import { RecentBaseSnapshotReader } from '../reader/recent-base-snapshot-reader';
 import { MarkerObject, RuleObject } from '../../rule/types';
+import { WorldviousUpdater } from '../worldvious-updater/worldvious-updater';
 
 export class ExecutorTask
 {
@@ -85,6 +86,7 @@ export class ExecutorTask
             .then(() => this._producePersistableSnapshot(tracker))
             .then(() => this._calculateSummary(tracker))
             .then(() => this._processSearch(tracker))
+            .then(() => this._processWorldvious(tracker))
             .then(() => this._persist(tracker))
             .then(() => this._notifyWebSocket(tracker))
             .then(() => {})
@@ -389,7 +391,12 @@ export class ExecutorTask
 
         })
     }
-    
+
+    private _processWorldvious(tracker: ProcessingTrackerScoper)
+    {
+        const processor = new WorldviousUpdater(this._context);
+        return processor.process(this._targetBundleState!);
+    }
 
     private _persist(tracker: ProcessingTrackerScoper)
     {

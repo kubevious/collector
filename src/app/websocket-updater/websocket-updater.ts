@@ -39,6 +39,21 @@ export class WebSocketUpdater
                 { target: WebSocketKind.marker_result },
             ]
         }
+        return this._notifySocket(body);
+    }
+
+    notifyReporter()
+    {
+        const body = {
+            items: [
+                { target: WebSocketKind.cluster_reporting_status },
+            ]
+        }
+        return this._notifySocket(body);
+    }
+
+    private _notifySocket(body: any)
+    {
         return this._backendClient.post('/api/internal/socket/report', {}, body);
     }
 }

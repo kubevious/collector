@@ -122,7 +122,11 @@ export class Collector
             })
             .then(() => {
                 this._counters.newSnapshotCount++;
-
+            })
+            .then(() => {
+                return this._context.webSocketUpdater.notifyReporter();
+            })
+            .then(() => {
                 return {
                     id: id
                 };
@@ -163,7 +167,11 @@ export class Collector
 
         this._counters.itemsReportCount++;
 
-        return response;
+        return Promise.resolve()
+            .then(() => {
+                return this._context.webSocketUpdater.notifyReporter();
+            })
+            .then(() => response)
     }
 
     activateSnapshot(snapshotId: string)
@@ -209,8 +217,10 @@ export class Collector
             // Use only for debugging.
             // registry.debugOutputRegistry(`source-snapshot/${snapshotId}`);
 
-            return {};
-        });
+            return this._context.webSocketUpdater.notifyReporter()
+                .then(() => ({}))
+        })
+
     }
 
     storeConfig(hash: string, config: any)
