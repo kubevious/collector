@@ -24,6 +24,8 @@ import { SnapshotPersistor } from './app/persistor';
 import { ConfigAccessor } from '@kubevious/data-models';
 import { SearchEnginePersistor } from './app/search-engine';
 
+import { HistoryCleanupProcessor } from './app/history-cleanup/history-cleanup-processor';
+
 import VERSION from './version'
 import { WebSocketUpdater } from './app/websocket-updater/websocket-updater';
 import { BackendMetrics } from './app/backend-metrics';
@@ -55,7 +57,7 @@ export class Context
     private _snapshotProcessor: SnapshotProcessor;
     private _snapshotPersistor : SnapshotPersistor;
 
-    // private _historyCleanupProcessor: HistoryCleanupProcessor;
+    private _historyCleanupProcessor: HistoryCleanupProcessor;
 
     private _seriesResamplerHelper: SeriesResampler;
 
@@ -94,11 +96,11 @@ export class Context
 
         this._snapshotProcessor = new SnapshotProcessor(this);
         this._snapshotPersistor = new SnapshotPersistor(this);
-
-        this._webSocketUpdater = new WebSocketUpdater(this);
-        // this._historyCleanupProcessor = new HistoryCleanupProcessor(this);
+        this._historyCleanupProcessor = new HistoryCleanupProcessor(this);
 
         this._searchEnginePersistor = new SearchEnginePersistor(this);
+
+        this._webSocketUpdater = new WebSocketUpdater(this);
 
         this._seriesResamplerHelper = new SeriesResampler(200)
             .column("changes", x => _.max(x) ?? 0)
@@ -125,6 +127,9 @@ export class Context
         backend.stage("setup-parser-loader", () => this._parserLoader.init());
 
         backend.stage("setup-server", () => this._server.run());
+
+        backend.stage("setup-server", () => this.historyCleanupProcessor.init());
+
     }
 
     get backend() {
@@ -209,6 +214,10 @@ export class Context
 
     get backendMetrics() {
         return this._backendMetrics;
+    }
+
+    get historyCleanupProcessor() {
+        return this._historyCleanupProcessor;
     }
 
     private _setupMetricsTracker()

@@ -1,5 +1,5 @@
 import _ from 'the-lodash';
-import { Promise, Resolvable } from 'the-promise';
+import { Promise } from 'the-promise';
 import { ILogger } from 'the-logger' ;
 
 import { Context } from '../context';
@@ -64,7 +64,8 @@ export class FacadeRegistry
 
         return this._context.executor.process({ 
             registry: registry,
-         });
+        })
+        ;
     }
 
     private _jobDampenerStateMonitorCb(state: JobDampenerState)
@@ -72,11 +73,29 @@ export class FacadeRegistry
         this._logger.info("[_jobDampenerStateMonitorCb] ", state);
         this._latestDampenerState = state;
 
-        if (this._context.dataStore.isConnected) {
-            return this._persistLatestJobProcessorState();
-        } else {
-            this._logger.info("[_jobDampenerStateMonitorCb] NOT YET CONNECTED TO DB");
+        return Promise.resolve(null)
+            .then(() => {
+                if (this._context.dataStore.isConnected) {
+                    return this._persistLatestJobProcessorState();
+                } else {
+                    this._logger.info("[_jobDampenerStateMonitorCb] NOT YET CONNECTED TO DB");
+                }
+            })
+            .then(() => {
+                return this._tryProcessHistoryCleanup();
+            })
+    }
+
+    private _tryProcessHistoryCleanup()
+    {
+        if (!this._latestDampenerState) {
+            return;
         }
+        if (this._latestDampenerState.isProcessing) {
+            return;
+        }
+
+        this._context.historyCleanupProcessor.tryProcess();
     }
 
     private _onDbConnect()

@@ -53,7 +53,6 @@ export class Executor
         ;
     }
 
-
     extractMetrics()
     {
         const metrics : BackendMetricItem[] = [];
