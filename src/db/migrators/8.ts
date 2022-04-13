@@ -1,13 +1,12 @@
 import _ from 'the-lodash';
 import { Promise } from 'the-promise';
 import { RuleConfig } from '@kubevious/ui-middleware/dist/services/rule';
-import { RulesRow } from '@kubevious/data-models/dist/models/rule_engine';
-import { HashUtils } from '@kubevious/data-models';
+import { makeDbRulesRow } from '@kubevious/data-models/dist/accessors/rules-engine';
 
 import { Migrator } from '../migration';
 
 export default Migrator()
-    .handler(({ logger, driver, executeSql, context }) => {
+    .handler(({ executeSql }) => {
 
         return Promise.resolve()
             .then(() => Promise.serial(MARKERS, x => {
@@ -20,14 +19,14 @@ export default Migrator()
                 ]
                 return executeSql(sql, params);
             }))
-            .then(() => Promise.serial(RULES, (x : any) => {
+            .then(() => Promise.serial(RULES, (x) => {
                 x.enabled = true;
-                const row = makeDbRule(x);
+                const row = makeDbRulesRow(x);
                 const sql = `INSERT IGNORE INTO \`rules\`(\`name\`, \`enabled\`, \`date\`, \`target\`, \`script\`, \`hash\`) VALUES (?, ?, ?, ?, ?, ?)`;
                 const params = [
                     row.name, 
                     row.enabled, 
-                    new Date(), // row.date, // TODO
+                    row.date,
                     row.target, 
                     row.script, 
                     row.hash
@@ -130,18 +129,3 @@ if (value) {
 `mark("public-application")`
     }
 ]
-
-// TODO: Move to data-models lib. Reuse in backend.
-export function makeDbRule(rule: RuleConfig) : Partial<RulesRow>
-{
-    const ruleObj : Partial<RulesRow> = {
-        name: rule.name,
-        enabled: rule.enabled,
-        target: rule.target,
-        script: rule.script,
-        date: new Date()
-    }
-    const hash = HashUtils.calculateObjectHash(ruleObj);
-    ruleObj.hash = hash;
-    return ruleObj;
-}

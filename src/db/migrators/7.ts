@@ -4,15 +4,18 @@ import { Promise } from 'the-promise';
 import { Migrator } from '../migration';
 
 export default Migrator()
-    .handler(({ logger, driver, executeSql, context }) => {
+    .handler(({ executeSql, sql }) => {
 
         const queries = [
-            "CREATE TABLE IF NOT EXISTS `notification_snooze` (" +
-            "    `kind` varchar(128) NOT NULL," +
-            "    `feedback` binary(16) NOT NULL," +
-            "    `snooze` DATETIME NULL," +
-            "    PRIMARY KEY (`kind`, `feedback`)" +
-            ") ENGINE=InnoDB CHARACTER SET utf8 COLLATE utf8_general_ci;"
+
+            sql.createTable('notification_snooze', {
+                columns: [
+                    { name: 'kind', type: 'VARCHAR(128)', options: 'NOT NULL', isPrimaryKey: true },
+                    { name: 'feedback', type: 'BINARY(16)', options: 'NOT NULL', isPrimaryKey: true },
+                    { name: 'snooze', type: 'DATETIME', options: 'NULL' },
+                ]
+            })
+
         ];
 
         return Promise.serial(queries, x => executeSql(x));

@@ -4,7 +4,7 @@ import { Promise } from 'the-promise';
 import { Migrator } from '../migration';
 
 export default Migrator()
-    .handler(({ logger, driver, executeSql, context, sql }) => {
+    .handler(({ logger, executeSql, sql }) => {
         
         logger.info("Will be dropping history tables.");
 
@@ -16,6 +16,11 @@ export default Migrator()
         sql.dropTable('diff_items'),
         sql.dropTable('config_hashes'),
         sql.dropTable('timeline'),
+
+        sql.dropTable('summary_counters'),
+        sql.dropTable('summary_counters_by_kind'),
+        sql.dropTable('summary_delta_counters'),
+        sql.dropTable('summary_delta_counters_by_kind'),
 
         sql.createTable('snapshots', {
             columns: [

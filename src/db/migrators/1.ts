@@ -4,14 +4,17 @@ import { Promise } from 'the-promise';
 import { Migrator } from '../migration';
 
 export default Migrator()
-    .handler(({ logger, driver, executeSql, context }) => {
+    .handler(({ executeSql, sql }) => {
         
         const queries = [
-            "CREATE TABLE IF NOT EXISTS `config` (" +
-                "`key` varchar(64) NOT NULL DEFAULT ''," +
-                "`value` json NOT NULL," +
-                "PRIMARY KEY (`key`)" +
-            ") ENGINE=InnoDB CHARACTER SET utf8 COLLATE utf8_general_ci;"
+
+            sql.createTable('config', {
+                columns: [
+                    { name: 'key', type: 'VARCHAR(128)', options: 'NOT NULL', isPrimaryKey: true },
+                    { name: 'value', type: 'JSON', options: 'NOT NULL' },
+                ]
+            })
+
         ];
         
         return Promise.serial(queries, x => executeSql(x));

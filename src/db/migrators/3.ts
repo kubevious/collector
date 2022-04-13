@@ -4,77 +4,69 @@ import { Promise } from 'the-promise';
 import { Migrator } from '../migration';
 
 export default Migrator()
-    .handler(({ logger, driver, executeSql, context }) => {
+    .handler(({ executeSql, sql }) => {
         
         const queries = [
 
-        "CREATE TABLE IF NOT EXISTS `rules` (" +
-            "`name` varchar(128) NOT NULL," +
-            "`enabled` TINYINT NOT NULL," +
-            "`date` DATETIME NOT NULL," +
-            "`target` TEXT NOT NULL," +
-            "`script` TEXT NOT NULL," +
-            "`hash` BINARY(32) NULL," +
-            "PRIMARY KEY (`name`)" +
-        ") ENGINE=InnoDB CHARACTER SET utf8 COLLATE utf8_general_ci;"
+            sql.createTable('rules', {
+                columns: [
+                    { name: 'name', type: 'VARCHAR(128)', options: 'NOT NULL', isPrimaryKey: true },
+                    { name: 'enabled', type: 'TINYINT', options: 'NOT NULL' },
+                    { name: 'date', type: 'DATETIME', options: 'NOT NULL' },
+                    { name: 'target', type: 'TEXT', options: 'NOT NULL' },
+                    { name: 'script', type: 'TEXT', options: 'NOT NULL' },
+                    { name: 'hash', type: 'BINARY(32)', options: 'NULL' },
+                ]
+            }),
 
-        ,
+            sql.createTable('rule_statuses', {
+                columns: [
+                    { name: 'id', type: 'INT UNSIGNED', options: 'NOT NULL AUTO_INCREMENT', isPrimaryKey: true },
+                    { name: 'rule_name', type: 'VARCHAR(128)', options: 'NOT NULL', isIndexed: true},
+                    { name: 'hash', type: 'BINARY(32)', options: 'NOT NULL' },
+                    { name: 'date', type: 'DATETIME', options: 'NOT NULL' },
+                    { name: 'error_count', type: 'INT UNSIGNED', options: 'NOT NULL' },
+                    { name: 'item_count', type: 'INT UNSIGNED', options: 'NOT NULL' },
+                ]
+            }),
 
-        "CREATE TABLE IF NOT EXISTS `rule_statuses` (" +
-            "`id` int unsigned NOT NULL AUTO_INCREMENT," +
-            "`rule_name` varchar(128) NOT NULL," +
-            "`hash` BINARY(32) NOT NULL," +
-            "`date` DATETIME NOT NULL," +
-            "`error_count` int unsigned NOT NULL," +
-            "`item_count` int unsigned NOT NULL," +
-            "PRIMARY KEY (`id`)," +
-            "KEY `rule_name` (`rule_name`)" +
-        ") ENGINE=InnoDB CHARACTER SET utf8 COLLATE utf8_general_ci;"
+            sql.createTable('rule_logs', {
+                columns: [
+                    { name: 'id', type: 'INT UNSIGNED', options: 'NOT NULL AUTO_INCREMENT', isPrimaryKey: true },
+                    { name: 'rule_name', type: 'VARCHAR(128)', options: 'NOT NULL', isIndexed: true},
+                    { name: 'kind', type: 'VARCHAR(128)', options: 'NOT NULL' },
+                    { name: 'msg', type: 'JSON', options: 'NOT NULL' },
+                ]
+            }),
 
-        ,
+            sql.createTable('rule_items', {
+                columns: [
+                    { name: 'id', type: 'INT UNSIGNED', options: 'NOT NULL AUTO_INCREMENT', isPrimaryKey: true },
+                    { name: 'rule_name', type: 'VARCHAR(128)', options: 'NOT NULL', isIndexed: true},
+                    { name: 'dn', type: 'VARCHAR(1024)', options: 'NOT NULL' },
+                    { name: 'errors', type: 'INT UNSIGNED', options: 'NOT NULL' },
+                    { name: 'warnings', type: 'INT UNSIGNED', options: 'NOT NULL' },
+                    { name: 'markers', type: 'JSON', options: 'NULL' },
+                ]
+            }),
 
-        "CREATE TABLE IF NOT EXISTS `rule_logs` (" +
-            "`id` int unsigned NOT NULL AUTO_INCREMENT," +
-            "`rule_name` varchar(128) NOT NULL," +
-            "`kind` varchar(128) NOT NULL," +
-            "`msg` json NOT NULL," +
-            "PRIMARY KEY (`id`)," +
-            "KEY `rule_name` (`rule_name`)" +
-        ") ENGINE=InnoDB CHARACTER SET utf8 COLLATE utf8_general_ci;" 
-
-        ,
-
-        "CREATE TABLE IF NOT EXISTS `rule_items` (" +
-            "`id` int unsigned NOT NULL AUTO_INCREMENT," +
-            "`rule_name` varchar(128) NOT NULL," +
-            "`dn` varchar(1024) NOT NULL," +
-            "`errors` int unsigned NOT NULL," +
-            "`warnings` int unsigned NOT NULL," +
-            "`markers` json NULL," +
-            "PRIMARY KEY (`id`)," +
-            "KEY `rule_name` (`rule_name`)" +
-        ") ENGINE=InnoDB CHARACTER SET utf8 COLLATE utf8_general_ci;"
-
-        ,
+            sql.createTable('markers', {
+                columns: [
+                    { name: 'name', type: 'VARCHAR(128)', options: 'NOT NULL', isPrimaryKey: true },
+                    { name: 'shape', type: 'VARCHAR(128)', options: 'NOT NULL' },
+                    { name: 'color', type: 'VARCHAR(128)', options: 'NOT NULL' },
+                    { name: 'propagate', type: 'TINYINT', options: 'NOT NULL' },
+                ]
+            }),
 
 
-        "CREATE TABLE IF NOT EXISTS `markers` (" +
-            "`name` varchar(128) NOT NULL," +
-            "`shape` varchar(128) NOT NULL," +
-            "`color` varchar(128) NOT NULL," +
-            "`propagate` TINYINT NOT NULL," +
-            "PRIMARY KEY (`name`)" +
-        ") ENGINE=InnoDB CHARACTER SET utf8 COLLATE utf8_general_ci;" 
-
-        ,
-
-        "CREATE TABLE IF NOT EXISTS `marker_items` (" +
-            "`id` int unsigned NOT NULL AUTO_INCREMENT," +
-            "`marker_name` varchar(128) NOT NULL," +
-            "`dn` varchar(1024) NOT NULL," +
-            "PRIMARY KEY (`id`)," +
-            "KEY `marker_name` (`marker_name`)" +
-        ") ENGINE=InnoDB CHARACTER SET utf8 COLLATE utf8_general_ci;" 
+            sql.createTable('marker_items', {
+                columns: [
+                    { name: 'id', type: 'INT UNSIGNED', options: 'NOT NULL AUTO_INCREMENT', isPrimaryKey: true },
+                    { name: 'marker_name', type: 'VARCHAR(128)', options: 'NOT NULL', isIndexed: true},
+                    { name: 'dn', type: 'VARCHAR(1024)', options: 'NOT NULL' },
+                ]
+            }),
 
         ];
 
