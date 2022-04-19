@@ -64,14 +64,14 @@
   resolved "https://registry.yarnpkg.com/@humanwhocodes/object-schema/-/object-schema-1.2.1.tgz#b520529ec21d8e5945a1851dfd1c32e94e39ff45"
   integrity sha512-ZnQMnLV4e7hDlUvw8H+U8ASL02SS2Gn6+9Ac3wGGLIe7+je2AeAOxPY+izIPJDfFDb7eDjev0Us8MO1iFRN8hA==
 
-"@kubevious/data-models@^1.0.20":
-  version "1.0.20"
-  resolved "https://registry.yarnpkg.com/@kubevious/data-models/-/data-models-1.0.20.tgz#22b0d622b5ec47687ca92b90e38c50bba72f5771"
-  integrity sha512-sxDNdiIUt0Sh9+wGL8Ml6EywO8CsgVIPzFuD1ciOXb3P+WfOARmvnzjEU+tJhn42fS/PRT3s2oRG4Q7wPBCOHA==
+"@kubevious/data-models@^1.0.21":
+  version "1.0.21"
+  resolved "https://registry.yarnpkg.com/@kubevious/data-models/-/data-models-1.0.21.tgz#fc5bebd18cffeb8ee146633978b2931a0ac1c771"
+  integrity sha512-O4OvFEpKY6yqY1I0Rg7AuSh4mJMTmWCcAzgeSgRqeTH6ocbf2DBdc7r2wFn06eLLvVMe12BBHT0ewszLqSkcpQ==
   dependencies:
     "@kubevious/easy-data-store" "^1.0.11"
     "@kubevious/helper-backend" "^1.0.38"
-    "@kubevious/ui-middleware" "^1.0.43"
+    "@kubevious/ui-middleware" "^1.0.62"
     moment "^2.29.1"
     the-lodash "^2.0.9"
     the-logger "^2.0.14"
@@ -122,11 +122,12 @@
     the-logger "^2.0.9"
     the-promise "^2.0.13"
 
-"@kubevious/helper-logic-processor@^1.0.72":
-  version "1.0.72"
-  resolved "https://registry.yarnpkg.com/@kubevious/helper-logic-processor/-/helper-logic-processor-1.0.72.tgz#7edb135eadf9f73b2a6e44730d3d5ac387c610d0"
-  integrity sha512-oeNfK5+PWMQ0d3swbcFlsuC87ajpLwzw21gjWPKlgP3Er02vMDoMKCT1uSwaNmzAUSnOKW01B+AeszxrOBl0pA==
+"@kubevious/helper-logic-processor@^1.0.73":
+  version "1.0.73"
+  resolved "https://registry.yarnpkg.com/@kubevious/helper-logic-processor/-/helper-logic-processor-1.0.73.tgz#01105c138fb39e84ee828436e7595aeddbe02078"
+  integrity sha512-o+tBKKDkDr2jSZvZAzPIevhuytb2tpc4VsdWitOX8pmu+tK09yRUYh0d3Ffcw+7yhWGCbx8Wn5nNXBBvTEfExA==
   dependencies:
+    "@kubevious/data-models" "^1.0.21"
     "@kubevious/entity-meta" "^1.0.56"
     "@kubevious/helper-backend" "^1.0.38"
     "@kubevious/state-registry" "^1.0.13"
@@ -213,7 +214,7 @@
     the-logger "^2.0.14"
     the-promise "^2.0.13"
 
-"@kubevious/ui-middleware@^1.0.43", "@kubevious/ui-middleware@^1.0.52", "@kubevious/ui-middleware@^1.0.62":
+"@kubevious/ui-middleware@^1.0.52", "@kubevious/ui-middleware@^1.0.62":
   version "1.0.62"
   resolved "https://registry.yarnpkg.com/@kubevious/ui-middleware/-/ui-middleware-1.0.62.tgz#2fccbbc01f53451e0665d74040264d205c97d5ea"
   integrity sha512-e7kfROVKpHFlemouN86dLIwXP2lSbIFhx4l5OyoJE4q909cqpSYOp+MjA3eCrEf9ke14WmQ9DwaGHUoJ8/NQ1w==
