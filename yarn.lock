@@ -122,10 +122,10 @@
     the-logger "^2.0.9"
     the-promise "^2.0.13"
 
-"@kubevious/helper-logic-processor@^1.0.74":
-  version "1.0.74"
-  resolved "https://registry.yarnpkg.com/@kubevious/helper-logic-processor/-/helper-logic-processor-1.0.74.tgz#f8551a8a454c1a728182084bd4226273087a6a48"
-  integrity sha512-MNaANZehKVKqjM0d0MaXxqzLgHoRKwVqYu/1y36LXI0bYzxJkVjB/CiR4sGLhwMFzNPJW4a6mUbprmK1oCX7/g==
+"@kubevious/helper-logic-processor@^1.0.75":
+  version "1.0.75"
+  resolved "https://registry.yarnpkg.com/@kubevious/helper-logic-processor/-/helper-logic-processor-1.0.75.tgz#92d1afccd29b1e9b4bc0cfe7532ce8dcfae62ecc"
+  integrity sha512-qosqT1pejkNCfBoqdmDB4oFe56u9RRMSv0AMojN/e7M059iWVlxNYijVqBv1/1Ws6r/CcZZX5OiL7Ba9DHgziw==
   dependencies:
     "@kubevious/data-models" "^1.0.21"
     "@kubevious/entity-meta" "^1.0.56"
