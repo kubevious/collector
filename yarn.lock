@@ -90,10 +90,10 @@
     the-logger "^2.0.14"
     the-promise "^2.0.13"
 
-"@kubevious/entity-meta@^1.0.45", "@kubevious/entity-meta@^1.0.55", "@kubevious/entity-meta@^1.0.56":
-  version "1.0.56"
-  resolved "https://registry.yarnpkg.com/@kubevious/entity-meta/-/entity-meta-1.0.56.tgz#e2460fee0d7ae931b1da911725e9f0aa556a9e48"
-  integrity sha512-KW9dhxn6bEGK9z4/426i8Un+/uPc1HLUoZA61okj26s+BKnB9uOte2PPGdl0tu/I0WIx2zZ9zMj21NywdfH09g==
+"@kubevious/entity-meta@^1.0.45", "@kubevious/entity-meta@^1.0.55", "@kubevious/entity-meta@^1.0.56", "@kubevious/entity-meta@^1.0.57":
+  version "1.0.57"
+  resolved "https://registry.yarnpkg.com/@kubevious/entity-meta/-/entity-meta-1.0.57.tgz#ce51b61e0e5aa097d7658d39d924c474e68ffa7b"
+  integrity sha512-dgJUeH+E/SbkK0+S7EVtTesMMJ7Wb9ZkB8grqY0G/p4x0bRiZixRf9vn6CM4a4Ijr1w++EiYD1qSqjZV+AJ1Dg==
   dependencies:
     the-lodash "^2.0.9"
 
@@ -122,13 +122,13 @@
     the-logger "^2.0.9"
     the-promise "^2.0.13"
 
-"@kubevious/helper-logic-processor@^1.0.75":
-  version "1.0.75"
-  resolved "https://registry.yarnpkg.com/@kubevious/helper-logic-processor/-/helper-logic-processor-1.0.75.tgz#92d1afccd29b1e9b4bc0cfe7532ce8dcfae62ecc"
-  integrity sha512-qosqT1pejkNCfBoqdmDB4oFe56u9RRMSv0AMojN/e7M059iWVlxNYijVqBv1/1Ws6r/CcZZX5OiL7Ba9DHgziw==
+"@kubevious/helper-logic-processor@^1.0.76":
+  version "1.0.76"
+  resolved "https://registry.yarnpkg.com/@kubevious/helper-logic-processor/-/helper-logic-processor-1.0.76.tgz#0a06d6f3d2cdb754dc36ac6730ccd1e02837a941"
+  integrity sha512-8/9g6O1l7B+w0fe3xew2wPcoW8F+5Qnkw+7W9lmCXHCJ6fyRsBFxlTTJ+DEY3KcuG4Sy+9+RFBqWgVmDxGYd4A==
   dependencies:
     "@kubevious/data-models" "^1.0.21"
-    "@kubevious/entity-meta" "^1.0.56"
+    "@kubevious/entity-meta" "^1.0.57"
     "@kubevious/helper-backend" "^1.0.38"
     "@kubevious/state-registry" "^1.0.13"
     glob "^7.1.7"
