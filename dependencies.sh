@@ -15,6 +15,7 @@ REPO_DEPENDENCIES=(
     "@kubevious/ui-middleware"
     "@kubevious/http-client"
     "@kubevious/helper-redis"
+    "@kubevious/agent-middleware"
 )
 
 FORCE_RESOLVE_DEPENDENCIES=(
@@ -32,4 +33,5 @@ FORCE_RESOLVE_DEPENDENCIES=(
     "@kubevious/ui-middleware"
     "@kubevious/http-client"
     "@kubevious/helper-redis"
+    "@kubevious/agent-middleware"
 )

@@ -4,15 +4,15 @@ import { Router } from '@kubevious/helper-backend'
 import Joi from 'joi';
 import { ILogger } from 'the-logger';
 
-import { RequestReportSnapshot, RequestReportSnapshotItems, RequestActivateSnapshot, RequestReportConfig } from '@kubevious/helpers/dist/reportable/types'
+import { RequestReportSnapshot, RequestReportSnapshotItems, RequestActivateSnapshot, RequestReportConfig } from '@kubevious/agent-middleware'
 
 export default function (router: Router, context: Context, logger: ILogger) {
 
     router.url('/api/v1/collect');
     
-    router.post('/snapshot', function (req, res) {
+    router.post<{}, RequestReportSnapshot>('/snapshot', function (req, res) {
 
-        const data = <RequestReportSnapshot>req.body;
+        const data = req.body;
 
         const date = new Date(data.date);
         const parserVersion = data.version;
@@ -30,8 +30,8 @@ export default function (router: Router, context: Context, logger: ILogger) {
         })
     );
 
-    router.post('/snapshot/items', function (req, res) {
-        const data = <RequestReportSnapshotItems>req.body;
+    router.post<{}, RequestReportSnapshotItems>('/snapshot/items', function (req, res) {
+        const data = req.body;
 
         return context.collector.acceptSnapshotItems(data.snapshot_id, data.items);
     })
@@ -42,11 +42,9 @@ export default function (router: Router, context: Context, logger: ILogger) {
         })
     );
 
-    router.post('/snapshot/activate', function (req, res) {
+    router.post<{}, RequestActivateSnapshot>('/snapshot/activate', function (req, res) {
 
-        const data = <RequestActivateSnapshot>req.body;
-
-        return context.collector.activateSnapshot(data.snapshot_id);
+        return context.collector.activateSnapshot(req.body.snapshot_id);
     })
     .bodySchema(
         Joi.object({
@@ -61,9 +59,9 @@ export default function (router: Router, context: Context, logger: ILogger) {
         })
     );
 
-    router.post('/config', (req, res) => {
+    router.post<{}, RequestReportConfig>('/config', (req, res) => {
 
-        const data = <RequestReportConfig>req.body;
+        const data = req.body;
 
         return context.collector.storeConfig(data.hash, data.config);
 

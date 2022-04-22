@@ -64,6 +64,15 @@
   resolved "https://registry.yarnpkg.com/@humanwhocodes/object-schema/-/object-schema-1.2.1.tgz#b520529ec21d8e5945a1851dfd1c32e94e39ff45"
   integrity sha512-ZnQMnLV4e7hDlUvw8H+U8ASL02SS2Gn6+9Ac3wGGLIe7+je2AeAOxPY+izIPJDfFDb7eDjev0Us8MO1iFRN8hA==
 
+"@kubevious/agent-middleware@^1.0.82":
+  version "1.0.82"
+  resolved "https://registry.yarnpkg.com/@kubevious/agent-middleware/-/agent-middleware-1.0.82.tgz#3e55c7570ccabad58179e090c5250dadff1bad70"
+  integrity sha512-EuMmJAzkVXgmbtZtcbX9ePXlkCKMsKkJLPGSKiRHYQBWe0hRTTwJnL0IFVFw1pAfclkTYTahoYjWfBF10NbuFA==
+  dependencies:
+    kubernetes-types "^1.21.0-beta.1"
+    the-lodash "^2.0.9"
+    the-promise "^2.0.13"
+
 "@kubevious/data-models@^1.0.21":
   version "1.0.21"
   resolved "https://registry.yarnpkg.com/@kubevious/data-models/-/data-models-1.0.21.tgz#fc5bebd18cffeb8ee146633978b2931a0ac1c771"
@@ -122,10 +131,10 @@
     the-logger "^2.0.9"
     the-promise "^2.0.13"
 
-"@kubevious/helper-logic-processor@^1.0.78":
-  version "1.0.78"
-  resolved "https://registry.yarnpkg.com/@kubevious/helper-logic-processor/-/helper-logic-processor-1.0.78.tgz#a45bcb2a20a2f7c36a2be4e91c0c7969fd7a7762"
-  integrity sha512-KKOkt+MS5h8i1s8/nmJxQMB65nW9TcAqSMBhGZv+ppAe2CCaNQHJUPNYlT+M4zGLaih0ARRHpOXe8KpqemdHzw==
+"@kubevious/helper-logic-processor@^1.0.79":
+  version "1.0.79"
+  resolved "https://registry.yarnpkg.com/@kubevious/helper-logic-processor/-/helper-logic-processor-1.0.79.tgz#955090b11dd0472b0046acdb8d442d0b5e28dad7"
+  integrity sha512-BNM5j6VjAYmaYQLeJFkR0HCJKMaB38QMcIUJvTmtrKPsPOD6SHIxHjlQUNdq/ddyDtBveJ3EEic4+bsh3SOReg==
   dependencies:
     "@kubevious/data-models" "^1.0.21"
     "@kubevious/entity-meta" "^1.0.57"
@@ -173,10 +182,10 @@
     the-logger "^2.0.14"
     the-promise "^2.0.13"
 
-"@kubevious/helpers@^1.0.62", "@kubevious/helpers@^1.0.64":
-  version "1.0.64"
-  resolved "https://registry.yarnpkg.com/@kubevious/helpers/-/helpers-1.0.64.tgz#4d1d8f7aa61fee3ccfcb8d91460599b16439da6e"
-  integrity sha512-YOVh8b4A7wbeck6VJAU0uhkNA+fJvg0HmUOFdy9cqZYU9IgabiKN6DcXOkWnaKHiA/mr1XTTZXQoy/9hyr84Sg==
+"@kubevious/helpers@^1.0.62", "@kubevious/helpers@^1.0.65":
+  version "1.0.65"
+  resolved "https://registry.yarnpkg.com/@kubevious/helpers/-/helpers-1.0.65.tgz#befbe693889d87f56aef905103c9c149223cf72b"
+  integrity sha512-TNHnE6CwmvfakTN43eM+Y3DBf3WhnEBPTnlUFYn/W+18HWlKTZvdb5ISZARurV0XbpV2W9FBXECFweiFdranWw==
   dependencies:
     moment "^2.29.1"
     the-lodash "^2.0.9"

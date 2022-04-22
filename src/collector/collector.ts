@@ -10,7 +10,7 @@ import { K8sConfig, extractK8sConfigId } from '@kubevious/helper-logic-processor
 
 import { UuidUtils } from '@kubevious/data-models';
 
-import { ReportableSnapshotItem, ResponseReportSnapshot, ResponseReportSnapshotItems } from '@kubevious/helpers/dist/reportable/types';
+import { ReportableSnapshotItem, ResponseReportSnapshot, ResponseReportSnapshotItems } from '@kubevious/agent-middleware';
 import { CollectorReportingInfo } from '@kubevious/data-models/dist/accessors/config-accessor';
 
 import { CollectorSnapshotInfo, MetricItem } from './types';
