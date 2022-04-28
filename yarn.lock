@@ -99,10 +99,10 @@
     the-logger "^2.0.14"
     the-promise "^2.0.13"
 
-"@kubevious/entity-meta@^1.0.45", "@kubevious/entity-meta@^1.0.55", "@kubevious/entity-meta@^1.0.56", "@kubevious/entity-meta@^1.0.63":
-  version "1.0.63"
-  resolved "https://registry.yarnpkg.com/@kubevious/entity-meta/-/entity-meta-1.0.63.tgz#4d958586fbd635629ef0b8e0f20f223f0aa65672"
-  integrity sha512-eDdbXlzP2ULiQbvfDbpbDzwGA7kvxxSrN2hExUxBpmVidR14M/4WQM/p9qUMHUflS5xdJR3TQAKZfATP2fAKZw==
+"@kubevious/entity-meta@^1.0.45", "@kubevious/entity-meta@^1.0.55", "@kubevious/entity-meta@^1.0.56", "@kubevious/entity-meta@^1.0.65":
+  version "1.0.65"
+  resolved "https://registry.yarnpkg.com/@kubevious/entity-meta/-/entity-meta-1.0.65.tgz#8dd2161ca65b6f0f5fcb052104b594919e8cc676"
+  integrity sha512-rny+3Td4k0wQVUugq+9teCQzHRZO+eiAxkEOT28Krt+mk2aed+hyVdmbLOoSQZxlTes0i53TpyzNnxaFDKKGYg==
   dependencies:
     the-lodash "^2.0.9"
 
@@ -131,18 +131,19 @@
     the-logger "^2.0.9"
     the-promise "^2.0.13"
 
-"@kubevious/helper-logic-processor@^1.0.83":
-  version "1.0.83"
-  resolved "https://registry.yarnpkg.com/@kubevious/helper-logic-processor/-/helper-logic-processor-1.0.83.tgz#1b12a9f31d863d45f0ffeb95488036845819dac3"
-  integrity sha512-j4IC5qE/zHq27Vyr7Y4orV+jXyXDMyPTlRvGD5Ra24Bpt4ZjQRpnDrej62GOA/Xzo1ljBXA9+hZPMJse8VzPBQ==
+"@kubevious/helper-logic-processor@^1.0.85":
+  version "1.0.85"
+  resolved "https://registry.yarnpkg.com/@kubevious/helper-logic-processor/-/helper-logic-processor-1.0.85.tgz#97f6be8072fb3c291a8ed2c5b1508da4823ed322"
+  integrity sha512-Qnzs9YioGQ7p532gFFbFTvOzzc9dYpMgThCOVjKtGsTc6RSxn37ZiCeQ7dc2JnPKVoh669l2G+6UU1S5HOW9zg==
   dependencies:
     "@kubevious/data-models" "^1.0.21"
-    "@kubevious/entity-meta" "^1.0.63"
+    "@kubevious/entity-meta" "^1.0.65"
     "@kubevious/helper-backend" "^1.0.38"
     "@kubevious/state-registry" "^1.0.13"
     glob "^7.1.7"
     glob-promise "^4.2.0"
     kubernetes-types "^1.21.0-beta.1"
+    moment "^2.29.3"
     the-lodash "^2.0.9"
     the-logger "^2.0.14"
     the-promise "^2.0.13"
@@ -1677,6 +1678,11 @@ moment-timezone@^0.5.x:
   version "2.29.1"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.29.1.tgz#b2be769fa31940be9eeea6469c075e35006fa3d3"
   integrity sha512-kHmoybcPV8Sqy59DwNDY3Jefr64lK/by/da0ViFcuA4DH0vQg5Q6Ze5VimxkfQNSC+Mls/Kx53s7TjP1RhFEDQ==
+
+moment@^2.29.3:
+  version "2.29.3"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.29.3.tgz#edd47411c322413999f7a5940d526de183c031f3"
+  integrity sha512-c6YRvhEo//6T2Jz/vVtYzqBzwvPT95JBQ+smCytzf7c50oMZRsR/a4w88aD34I+/QVSfnoAnSBFPJHItlOMJVw==
 
 morgan@^1.10.0:
   version "1.10.0"
