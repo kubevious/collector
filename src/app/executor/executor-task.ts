@@ -24,6 +24,7 @@ import { ValidationConfig } from '@kubevious/entity-meta';
 import { RecentBaseSnapshotReader } from '../reader/recent-base-snapshot-reader';
 import { MarkerObject, RuleObject } from '../../rule/types';
 import { WorldviousUpdater } from '../worldvious-updater/worldvious-updater';
+import { PersistenceItem } from '@kubevious/helper-logic-processor/dist/store/presistence-store';
 
 export class ExecutorTask
 {
@@ -53,6 +54,7 @@ export class ExecutorTask
     private _snapshotDate: Date = new Date();
 
     private _validationConfig: Partial<ValidationConfig> = {};
+    private _logicStoreItems : PersistenceItem[] = [];
 
     constructor(logger: ILogger, context : Context, target: ExecutorTaskTarget)
     {
@@ -77,6 +79,7 @@ export class ExecutorTask
             .then(() => this._queryValidatorConfig(tracker))
             .then(() => this._queryRules(tracker))
             .then(() => this._queryMarkers(tracker))
+            .then(() => this._queryLogicStore(tracker))
             .then(() => this._executeLogicProcessor(tracker))
             .then(() => this._executeSnapshotProcessor(tracker))
             .then(() => this._queryBaseSnapshot(tracker))
@@ -146,6 +149,26 @@ export class ExecutorTask
         });
     }
 
+    private _queryLogicStore(tracker: ProcessingTrackerScoper)
+    {
+        return tracker.scope("query-logic-store", (innerTracker) => {
+
+            return this._context.dataStore.table(this._context.dataStore.logicStore.LogicItemData)
+                .queryMany({})
+                .then(rows => {
+                    this._logicStoreItems = rows.map(x => {
+                        const item : PersistenceItem = {
+                            dn: x.dn!,
+                            key: x.key!,
+                            value: x.value!,
+                        }
+                        return item;
+                    });
+                });
+
+        });
+    }
+
     private _executeLogicProcessor(tracker: ProcessingTrackerScoper)
     {
         return tracker.scope("run-logic-processor", (innerTracker) => {
@@ -156,15 +179,18 @@ export class ExecutorTask
                 this._context.parserLoader,
                 this._target.registry,
                 this._validationConfig);
+            logicProcessor.store.loadItems(this._logicStoreItems);
+
             return logicProcessor.process()
                 .then(registryState => {
                     this.logger.info("[_executeLogicProcessor] End. Node Count: %s", registryState.getNodes().length)
 
                     this._registryState = registryState;
 
+                    this._logicStoreItems = logicProcessor.store.exportItems();
+
                     // this.logger.info("LogicProcessor Complete.")
                     // this.logger.info("RegistryState Item Count: %s", registryState.getCount());
-
                 })
 
         });
@@ -412,7 +438,8 @@ export class ExecutorTask
                 timelineSummary: this._timelineSummary!,
                 prevSnapshotId: this._latestSnapshot ? this._latestSnapshot!.snapshotId : null,
                 rules: this._rules!,
-                ruleEngineResult: this._ruleEngineResult!
+                ruleEngineResult: this._ruleEngineResult!,
+                logicStoreItems: this._logicStoreItems,
             }
 
             return this._context.snapshotPersistor.persist(target, innerTracker)

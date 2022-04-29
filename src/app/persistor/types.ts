@@ -5,6 +5,7 @@ import { DeltaAction } from '@kubevious/easy-data-store';
 import { MarkerItemsRow, RuleItemsRow } from '@kubevious/data-models/dist/models/rule_engine';
 
 import { RuleObject } from '../../rule/types';
+import { PersistenceItem } from '@kubevious/helper-logic-processor/dist/store/presistence-store';
 
 
 export interface SnapshotPersistorTarget {
@@ -17,7 +18,8 @@ export interface SnapshotPersistorTarget {
     summary: DeltaSummary,
     timelineSummary: TimelineSummary,
     rules: RuleObject[],
-    ruleEngineResult: RuleEngineExecutionContext
+    ruleEngineResult: RuleEngineExecutionContext,
+    logicStoreItems: PersistenceItem[],
 }
 
 export interface SnapshotPersistorOutputData {

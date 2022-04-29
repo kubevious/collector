@@ -16,6 +16,7 @@ import { UuidUtils } from '@kubevious/data-models';
 import { BufferUtils } from '@kubevious/data-models';
 
 import { LatestSnapshotInfo } from '@kubevious/data-models/dist/accessors/config-accessor';
+import { LogicItemDataRow } from '@kubevious/data-models/dist/models/logic-store';
 
 
 export class SnapshotPersistorTask
@@ -85,6 +86,7 @@ export class SnapshotPersistorTask
                 .then(() => this._persistRuleEngine(tracker))
                 .then(() => this._persistSnapshot(tracker))
                 .then(() => this._persistSnapshotIndex(tracker))
+                .then(() => this._persistLogicStoreItems(tracker))
         })
         .then(() => this._outputData)
     }
@@ -421,6 +423,19 @@ export class SnapshotPersistorTask
                 .then(delta => {
                     this._outputData.deltaMarkerItems = delta;
                 });
+        });
+    }
+
+    private _persistLogicStoreItems(tracker: ProcessingTrackerScoper)
+    {
+        return tracker.scope("logic-store", () => {
+
+            const targetItems : Partial<LogicItemDataRow>[] = this._target.logicStoreItems;
+
+            return this._dataStore.table(this._context.dataStore.logicStore.LogicItemData)
+                .synchronizer()
+                .execute(targetItems)
+                ;
         });
     }
 

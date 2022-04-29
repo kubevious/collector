@@ -15,8 +15,9 @@ import { ConfigAccessors, prepareConfig } from '@kubevious/data-models/dist/mode
 import { SnapshotsAccessors, prepareSnapshots } from '@kubevious/data-models/dist/models/snapshots'
 import { RuleEngineAccessors, prepareRuleEngine } from '@kubevious/data-models/dist/models/rule_engine'
 import { ValidationAccessors, prepareValidation } from '@kubevious/data-models/dist/models/validation'
+import { LogicStoreAccessors, prepareLogicStore } from '@kubevious/data-models/dist/models/logic-store'
 
-const TARGET_DB_VERSION : number = 9;
+const TARGET_DB_VERSION : number = 10;
 
 const DB_NAME = process.env.MYSQL_DB;
 
@@ -35,6 +36,7 @@ export class Database
     private _snapshots : SnapshotsAccessors;
     private _ruleEngine : RuleEngineAccessors;
     private _validation : ValidationAccessors;
+    private _logicStore : LogicStoreAccessors;
 
 
     constructor(logger : ILogger, context : Context)
@@ -50,6 +52,7 @@ export class Database
         this._snapshots = prepareSnapshots(this._dataStore);
         this._ruleEngine = prepareRuleEngine(this._dataStore);
         this._validation = prepareValidation(this._dataStore);
+        this._logicStore = prepareLogicStore(this._dataStore);
     }
 
     get logger() {
@@ -82,6 +85,10 @@ export class Database
 
     get validation() {
         return this._validation;
+    }
+
+    get logicStore() {
+        return this._logicStore;
     }
 
     private _loadMigrators()
