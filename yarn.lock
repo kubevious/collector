@@ -73,7 +73,7 @@
     the-lodash "^2.0.9"
     the-promise "^2.0.13"
 
-"@kubevious/data-models@^1.0.21", "@kubevious/data-models@^1.0.23":
+"@kubevious/data-models@^1.0.23":
   version "1.0.23"
   resolved "https://registry.yarnpkg.com/@kubevious/data-models/-/data-models-1.0.23.tgz#f3edeea08e9eea91db873d8722bf43df625835da"
   integrity sha512-zj5wiAHeOlwXMFCsVSMwY6noKHFV99OemGPslzHGEbsRNtBQjbjTpN+pjP+2JgBe4aKuPD/Heoc7McVB1hPsNg==
@@ -99,10 +99,10 @@
     the-logger "^2.0.14"
     the-promise "^2.0.13"
 
-"@kubevious/entity-meta@^1.0.45", "@kubevious/entity-meta@^1.0.55", "@kubevious/entity-meta@^1.0.56", "@kubevious/entity-meta@^1.0.65":
-  version "1.0.65"
-  resolved "https://registry.yarnpkg.com/@kubevious/entity-meta/-/entity-meta-1.0.65.tgz#8dd2161ca65b6f0f5fcb052104b594919e8cc676"
-  integrity sha512-rny+3Td4k0wQVUugq+9teCQzHRZO+eiAxkEOT28Krt+mk2aed+hyVdmbLOoSQZxlTes0i53TpyzNnxaFDKKGYg==
+"@kubevious/entity-meta@^1.0.45", "@kubevious/entity-meta@^1.0.55", "@kubevious/entity-meta@^1.0.56", "@kubevious/entity-meta@^1.0.66":
+  version "1.0.66"
+  resolved "https://registry.yarnpkg.com/@kubevious/entity-meta/-/entity-meta-1.0.66.tgz#3d4162609d330baa12194aa43ca04de4df463a80"
+  integrity sha512-bW/mSvU2e5trM47ZfI3PPdXcFPQPjE9yOtpttk3+1VrhscBt+Qwkrmltv3ki7Km5SUUBluPYaqFlxNAxUlj+VA==
   dependencies:
     the-lodash "^2.0.9"
 
@@ -131,13 +131,13 @@
     the-logger "^2.0.9"
     the-promise "^2.0.13"
 
-"@kubevious/helper-logic-processor@^1.0.87":
-  version "1.0.87"
-  resolved "https://registry.yarnpkg.com/@kubevious/helper-logic-processor/-/helper-logic-processor-1.0.87.tgz#e67efeba5fdafdccd9de2545486dbe189b8a2a4d"
-  integrity sha512-4L5uIQCoeaek5T78jYglHDL4R4WmIZwTXzGKchhi+oQIgmSY9/edn8J9Q5heNAB4UT3h6Qwi2EMzY6PhgBxMuA==
+"@kubevious/helper-logic-processor@^1.0.88":
+  version "1.0.88"
+  resolved "https://registry.yarnpkg.com/@kubevious/helper-logic-processor/-/helper-logic-processor-1.0.88.tgz#42f08482228ef071b8b97e8248a9dba643694def"
+  integrity sha512-HFtXDD7NecATmhXsenWQhXY+Vs9gRPCyn1GHkRtMb3lEWnHiWRrJBdFpciwHG4nvhQIzuTprjZNI81soRcF2fA==
   dependencies:
-    "@kubevious/data-models" "^1.0.21"
-    "@kubevious/entity-meta" "^1.0.65"
+    "@kubevious/data-models" "^1.0.23"
+    "@kubevious/entity-meta" "^1.0.66"
     "@kubevious/helper-backend" "^1.0.38"
     "@kubevious/state-registry" "^1.0.13"
     glob "^7.1.7"
