@@ -73,14 +73,14 @@
     the-lodash "^2.0.9"
     the-promise "^2.0.13"
 
-"@kubevious/data-models@^1.0.23":
-  version "1.0.23"
-  resolved "https://registry.yarnpkg.com/@kubevious/data-models/-/data-models-1.0.23.tgz#f3edeea08e9eea91db873d8722bf43df625835da"
-  integrity sha512-zj5wiAHeOlwXMFCsVSMwY6noKHFV99OemGPslzHGEbsRNtBQjbjTpN+pjP+2JgBe4aKuPD/Heoc7McVB1hPsNg==
+"@kubevious/data-models@^1.0.23", "@kubevious/data-models@^1.0.24":
+  version "1.0.24"
+  resolved "https://registry.yarnpkg.com/@kubevious/data-models/-/data-models-1.0.24.tgz#e76fda1291a0313ad6cfaaad15776295599a825a"
+  integrity sha512-8gp9jDcc1ChA41Pk94pDYo62FvVt2wJMlSuPwdOs4ayb8Wx4hVY4dRTSTWQOuh02X/9M7q/ybFRkOIxmlJGcVw==
   dependencies:
     "@kubevious/easy-data-store" "^1.0.11"
     "@kubevious/helper-backend" "^1.0.38"
-    "@kubevious/ui-middleware" "^1.0.62"
+    "@kubevious/ui-middleware" "^1.0.63"
     moment "^2.29.1"
     the-lodash "^2.0.9"
     the-logger "^2.0.14"
@@ -224,7 +224,7 @@
     the-logger "^2.0.14"
     the-promise "^2.0.13"
 
-"@kubevious/ui-middleware@^1.0.52", "@kubevious/ui-middleware@^1.0.62", "@kubevious/ui-middleware@^1.0.63":
+"@kubevious/ui-middleware@^1.0.52", "@kubevious/ui-middleware@^1.0.63":
   version "1.0.63"
   resolved "https://registry.yarnpkg.com/@kubevious/ui-middleware/-/ui-middleware-1.0.63.tgz#4a1891b8cf17832842ec980810e8b29281de50d1"
   integrity sha512-wNp5G/55DC50+7D6vSIDP9epeh+xi9l46FHQlhj/S4ds8JyOtr1O5wwfzB6oe27d+mLync9M5tsAdq/fIQBP+g==
