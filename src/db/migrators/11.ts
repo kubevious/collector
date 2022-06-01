@@ -20,6 +20,23 @@ export default Migrator()
             ]
         }),
 
+        sql.createTable('guard_validation_queue', {
+            columns: [
+                { name: 'namespace', type: 'VARCHAR(128)', options: 'NOT NULL', isPrimaryKey: true },
+                { name: 'name', type: 'VARCHAR(512)', options: 'NOT NULL', isPrimaryKey: true },
+                { name: 'date', type: 'DATETIME', options: 'NOT NULL' },
+            ]
+        }),
+
+        sql.createTable('guard_validation_history', {
+            columns: [
+                { name: 'namespace', type: 'VARCHAR(128)', options: 'NOT NULL', isPrimaryKey: true },
+                { name: 'name', type: 'VARCHAR(512)', options: 'NOT NULL', isPrimaryKey: true },
+                { name: 'date', type: 'DATETIME', options: 'NOT NULL' },
+                { name: 'state', type: 'VARCHAR(128)', options: 'NOT NULL' },
+            ]
+        }),
+
         sql.createTable('guard_validation_states', {
             columns: [
                 { name: 'namespace', type: 'VARCHAR(128)', options: 'NOT NULL', isPrimaryKey: true },
