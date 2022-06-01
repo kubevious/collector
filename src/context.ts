@@ -128,7 +128,7 @@ export class Context
 
         backend.stage("setup-server", () => this._server.run());
 
-        backend.stage("setup-server", () => this.historyCleanupProcessor.init());
+        backend.stage("setup-history-cleanup", () => this.historyCleanupProcessor.init());
 
     }
 
