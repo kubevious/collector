@@ -22,7 +22,7 @@
   "homepage": "https://github.com/kubevious/collector",
   "dependencies": {
     "@kubevious/agent-middleware": "^1.0.82",
-    "@kubevious/data-models": "^1.0.26",
+    "@kubevious/data-models": "^1.0.27",
     "@kubevious/easy-data-store": "^1.0.11",
     "@kubevious/entity-meta": "^1.0.69",
     "@kubevious/helper-backend": "^1.0.38",
@@ -31,7 +31,7 @@
     "@kubevious/helper-rule-engine": "^1.0.23",
     "@kubevious/helpers": "^1.0.65",
     "@kubevious/http-client": "^1.0.19",
-    "@kubevious/ui-middleware": "^1.0.63",
+    "@kubevious/ui-middleware": "^1.0.64",
     "@kubevious/websocket-server": "^1.0.26",
     "@kubevious/worldvious-client": "^1.0.9",
     "cron": "^1.8.2",
@@ -71,8 +71,8 @@
     "@kubevious/helper-rule-engine": "^1.0.23",
     "@kubevious/worldvious-client": "^1.0.9",
     "@kubevious/entity-meta": "^1.0.69",
-    "@kubevious/data-models": "^1.0.26",
-    "@kubevious/ui-middleware": "^1.0.63",
+    "@kubevious/data-models": "^1.0.27",
+    "@kubevious/ui-middleware": "^1.0.64",
     "@kubevious/http-client": "^1.0.19",
     "@kubevious/helper-redis": "^1.0.19",
     "@kubevious/agent-middleware": "^1.0.82"

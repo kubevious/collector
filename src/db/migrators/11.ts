@@ -32,8 +32,8 @@ export default Migrator()
             columns: [
                 { name: 'namespace', type: 'VARCHAR(128)', options: 'NOT NULL', isPrimaryKey: true },
                 { name: 'name', type: 'VARCHAR(512)', options: 'NOT NULL', isPrimaryKey: true },
-                { name: 'date', type: 'DATETIME', options: 'NOT NULL' },
-                { name: 'state', type: 'VARCHAR(128)', options: 'NOT NULL' },
+                { name: 'date', type: 'DATETIME', options: 'NOT NULL', isPrimaryKey: true },
+                { name: 'state', type: 'VARCHAR(128)', options: 'NOT NULL', isPrimaryKey: true },
             ]
         }),
 
@@ -45,7 +45,8 @@ export default Migrator()
                 { name: 'state', type: 'VARCHAR(128)', options: 'NOT NULL' },
                 { name: 'success', type: 'TINYINT', options: 'NULL' },
                 { name: 'summary', type: 'JSON', options: 'NULL' },
-                { name: 'issues', type: 'JSON', options: 'NULL' },
+                { name: 'newIssues', type: 'JSON', options: 'NULL' },
+                { name: 'clearedIssues', type: 'JSON', options: 'NULL' },
             ]
         }),
 
