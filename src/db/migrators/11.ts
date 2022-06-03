@@ -10,9 +10,9 @@ export default Migrator()
 
         sql.createTable('guard_change_packages', {
             columns: [
-                { name: 'namespace', type: 'VARCHAR(128)', options: 'NOT NULL', isPrimaryKey: true },
-                { name: 'name', type: 'VARCHAR(512)', options: 'NOT NULL', isPrimaryKey: true },
+                { name: 'change_id', type: 'VARCHAR(800)', options: 'NOT NULL', isPrimaryKey: true },
                 { name: 'date', type: 'DATETIME', options: 'NOT NULL' },
+                { name: 'source', type: 'JSON', options: 'NOT NULL' },
                 { name: 'summary', type: 'JSON', options: 'NOT NULL' },
                 { name: 'charts', type: 'JSON', options: 'NOT NULL' },
                 { name: 'changes', type: 'JSON', options: 'NOT NULL' },
@@ -22,25 +22,23 @@ export default Migrator()
 
         sql.createTable('guard_validation_queue', {
             columns: [
-                { name: 'namespace', type: 'VARCHAR(128)', options: 'NOT NULL', isPrimaryKey: true },
-                { name: 'name', type: 'VARCHAR(512)', options: 'NOT NULL', isPrimaryKey: true },
+                { name: 'change_id', type: 'VARCHAR(800)', options: 'NOT NULL', isPrimaryKey: true },
                 { name: 'date', type: 'DATETIME', options: 'NOT NULL' },
             ]
         }),
 
         sql.createTable('guard_validation_history', {
             columns: [
-                { name: 'namespace', type: 'VARCHAR(128)', options: 'NOT NULL', isPrimaryKey: true },
-                { name: 'name', type: 'VARCHAR(512)', options: 'NOT NULL', isPrimaryKey: true },
-                { name: 'date', type: 'DATETIME', options: 'NOT NULL', isPrimaryKey: true },
-                { name: 'state', type: 'VARCHAR(128)', options: 'NOT NULL', isPrimaryKey: true },
+                { name: 'id', type: 'INT UNSIGNED', options: 'NOT NULL AUTO_INCREMENT', isPrimaryKey: true },
+                { name: 'change_id', type: 'VARCHAR(800)', options: 'NOT NULL', isIndexed: true },
+                { name: 'date', type: 'DATETIME', options: 'NOT NULL' },
+                { name: 'state', type: 'VARCHAR(128)', options: 'NOT NULL' },
             ]
         }),
 
         sql.createTable('guard_validation_states', {
             columns: [
-                { name: 'namespace', type: 'VARCHAR(128)', options: 'NOT NULL', isPrimaryKey: true },
-                { name: 'name', type: 'VARCHAR(512)', options: 'NOT NULL', isPrimaryKey: true },
+                { name: 'change_id', type: 'VARCHAR(800)', options: 'NOT NULL', isPrimaryKey: true },
                 { name: 'date', type: 'DATETIME', options: 'NOT NULL' },
                 { name: 'state', type: 'VARCHAR(128)', options: 'NOT NULL' },
                 { name: 'success', type: 'TINYINT', options: 'NULL' },
