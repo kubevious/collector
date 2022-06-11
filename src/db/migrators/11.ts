@@ -10,8 +10,9 @@ export default Migrator()
 
         sql.createTable('guard_change_packages', {
             columns: [
-                { name: 'change_id', type: 'VARCHAR(800)', options: 'NOT NULL', isPrimaryKey: true },
-                { name: 'date', type: 'DATETIME', options: 'NOT NULL' },
+                { name: 'id', type: 'INT UNSIGNED', options: 'NOT NULL AUTO_INCREMENT', isPrimaryKey: true },
+                { name: 'change_id', type: 'VARCHAR(800)', options: 'NOT NULL', isIndexed: true },
+                { name: 'date', type: 'DATETIME', options: 'NOT NULL', isIndexed: true },
                 { name: 'source', type: 'JSON', options: 'NOT NULL' },
                 { name: 'summary', type: 'JSON', options: 'NOT NULL' },
                 { name: 'charts', type: 'JSON', options: 'NOT NULL' },
