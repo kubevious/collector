@@ -17,7 +17,7 @@ import { RuleEngineAccessors, prepareRuleEngine } from '@kubevious/data-models/d
 import { ValidationAccessors, prepareValidation } from '@kubevious/data-models/dist/models/validation'
 import { LogicStoreAccessors, prepareLogicStore } from '@kubevious/data-models/dist/models/logic-store'
 
-const TARGET_DB_VERSION : number = 10;
+const TARGET_DB_VERSION : number = 11;
 
 const DB_NAME = process.env.MYSQL_DB;
 
