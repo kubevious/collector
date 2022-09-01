@@ -6,7 +6,7 @@ import moment from 'moment';
 
 import { DateUtils } from '@kubevious/data-models';
 
-import { K8sConfig, extractK8sConfigId } from '@kubevious/helper-logic-processor';
+import { K8sConfig } from '@kubevious/helper-logic-processor';
 
 import { UuidUtils } from '@kubevious/data-models';
 
@@ -204,8 +204,7 @@ export class Collector
             {
                 const configHash = snapshotInfo.item_hashes[itemHash];
                 const config = this._configHashes[configHash];
-                const itemId = this._extractId(config);
-                registry.add(itemId, config);
+                registry.add(config);
             }
             
             this._cleanup();
@@ -234,12 +233,6 @@ export class Collector
     {
         this.logger.info("[completeSnapshotProcessing] snapshotId: %s", snapshotId);
         delete this._snapshotsToProcess[snapshotId];
-    }
-
-    private _extractId(config: any)
-    {
-        const c = <K8sConfig>config;
-        return extractK8sConfigId(c);
     }
 
     private _cleanup()

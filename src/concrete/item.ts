@@ -2,21 +2,26 @@ import _ from 'the-lodash';
 import { ILogger, DumpWriter } from 'the-logger';
 import { ConcreteRegistry } from './registry';
 
-import { ItemId, IConcreteItem } from '@kubevious/helper-logic-processor'
+import { ItemId, IConcreteItem, K8sConfig } from '@kubevious/helper-logic-processor'
+
+export function makeGroupKey(id: ItemId)
+{ 
+    return `${id.api}:${id.kind}`;
+}
 
 export class ConcreteItem implements IConcreteItem
 {
     private _registry : ConcreteRegistry;
     private _id : ItemId;
-    private _config : any;
+    private _config : K8sConfig;
     private _groupKey : string;
 
-    constructor(registry: ConcreteRegistry, id: ItemId, config : any)
+    constructor(registry: ConcreteRegistry, id: ItemId, config : K8sConfig)
     {
         this._registry = registry;
         this._id = id;
         this._config = config;
-        this._groupKey = `${id.api}:${id.kind}`;
+        this._groupKey = makeGroupKey(id);
     }
 
     get logger() : ILogger {
@@ -35,7 +40,7 @@ export class ConcreteItem implements IConcreteItem
         return this._groupKey;
     }
     
-    get config() : any {
+    get config() {
         return this._config;
     }
 
