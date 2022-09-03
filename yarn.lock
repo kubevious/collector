@@ -182,15 +182,15 @@
     the-logger "^2.0.14"
     the-promise "^2.0.13"
 
-"@kubevious/helpers@^1.0.65":
-  version "1.0.65"
-  resolved "https://registry.yarnpkg.com/@kubevious/helpers/-/helpers-1.0.65.tgz#befbe693889d87f56aef905103c9c149223cf72b"
-  integrity sha512-TNHnE6CwmvfakTN43eM+Y3DBf3WhnEBPTnlUFYn/W+18HWlKTZvdb5ISZARurV0XbpV2W9FBXECFweiFdranWw==
+"@kubevious/helpers@^1.0.66":
+  version "1.0.66"
+  resolved "https://registry.yarnpkg.com/@kubevious/helpers/-/helpers-1.0.66.tgz#af2974318e7eeaf9ad91f8ca5595f5d45e2f48cf"
+  integrity sha512-3T2tLGwS/OM8IkM17l6x9d9Xu2VpUx+lzJf3BWKrUX0ZjEk8yh2A6Agg8aYS1FiHNvRBfB1J/1YGibdPvxfyWg==
   dependencies:
     moment "^2.29.1"
     the-lodash "^2.0.9"
     the-logger "^2.0.14"
-    the-promise "^2.0.13"
+    the-promise "^2.0.15"
 
 "@kubevious/http-client@^1.0.19":
   version "1.0.19"
@@ -277,10 +277,10 @@
   resolved "https://registry.yarnpkg.com/@socket.io/base64-arraybuffer/-/base64-arraybuffer-1.0.2.tgz#568d9beae00b0d835f4f8c53fd55714986492e61"
   integrity sha512-dOlCBKnDw4iShaIsH/bxujKTM18+2TOAsYz+KSc11Am38H4q5Xw8Bbz97ZYdrVNM+um3p7w86Bvvmcn9q+5+eQ==
 
-"@types/bluebird@3.5.35":
-  version "3.5.35"
-  resolved "https://registry.yarnpkg.com/@types/bluebird/-/bluebird-3.5.35.tgz#3964c48372bf62d60616d8673dd77a9719ebac9b"
-  integrity sha512-2WeeXK7BuQo7yPI4WGOBum90SzF/f8rqlvpaXx4rjeTmNssGRDHWf7fgDUH90xMB3sUOu716fUK5d+OVx0+ncQ==
+"@types/bluebird@3.5.36":
+  version "3.5.36"
+  resolved "https://registry.yarnpkg.com/@types/bluebird/-/bluebird-3.5.36.tgz#00d9301d4dc35c2f6465a8aec634bb533674c652"
+  integrity sha512-HBNx4lhkxN7bx6P0++W8E289foSu8kO8GCk2unhuVggO+cE7rh9DhZUyPhUxNRG9m+5B5BTKxZQ5ZP92x/mx9Q==
 
 "@types/component-emitter@^1.2.10":
   version "1.2.11"
@@ -1673,6 +1673,11 @@ moment-timezone@^0.5.x:
   dependencies:
     moment ">= 2.9.0"
 
+moment@2.29.4:
+  version "2.29.4"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.29.4.tgz#3dbe052889fe7c1b2ed966fcb3a77328964ef108"
+  integrity sha512-5LC9SOxjSc2HF6vO2CyuTDNivEdoz2IvyJJGj6X8DJ0eFyfszE0QiEd+iXmBvUP3WHxSjFH/vIsA0EN00cgr8w==
+
 "moment@>= 2.9.0", moment@^2.29.1:
   version "2.29.1"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.29.1.tgz#b2be769fa31940be9eeea6469c075e35006fa3d3"
@@ -2358,14 +2363,14 @@ the-logger@^2.0.14, the-logger@^2.0.9:
     the-lodash "^2.0.9"
     the-promise "^2.0.13"
 
-the-promise@^2.0.12, the-promise@^2.0.13:
-  version "2.0.13"
-  resolved "https://registry.yarnpkg.com/the-promise/-/the-promise-2.0.13.tgz#1e56f577091965b7945ba8f3938a31cce0889558"
-  integrity sha512-/ZzPENiqQvD9wFkiUMefcQavhnnwKU3rnwkKLsVroR1FiOZl6OvaoFkFDNIQUesqCkvTwRAz8UHdupbX/9kPMg==
+the-promise@^2.0.12, the-promise@^2.0.13, the-promise@^2.0.15:
+  version "2.0.15"
+  resolved "https://registry.yarnpkg.com/the-promise/-/the-promise-2.0.15.tgz#f3cfc57676b4e21aeefc32ec9d9eb4b534bfc616"
+  integrity sha512-5nWyNDjjPz76xHx3iTypQyr215+r2SOawKy4UJyTs7r+zjd8oBUNAPIVlW7TUKbvFqMPg4A+FsRPmdCp5vewFw==
   dependencies:
-    "@types/bluebird" "3.5.35"
+    "@types/bluebird" "3.5.36"
     bluebird "3.7.2"
-    moment "^2.29.1"
+    moment "2.29.4"
     the-lodash "^2.0.9"
 
 thread-stream@^0.12.0:

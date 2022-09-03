@@ -29,7 +29,7 @@
     "@kubevious/helper-logic-processor": "^1.0.99",
     "@kubevious/helper-redis": "^1.0.19",
     "@kubevious/helper-rule-engine": "^1.0.23",
-    "@kubevious/helpers": "^1.0.65",
+    "@kubevious/helpers": "^1.0.66",
     "@kubevious/http-client": "^1.0.19",
     "@kubevious/ui-middleware": "^1.0.75",
     "@kubevious/websocket-server": "^1.0.26",
@@ -41,7 +41,7 @@
     "moment": "^2.29.1",
     "the-lodash": "^2.0.9",
     "the-logger": "^2.0.14",
-    "the-promise": "^2.0.13",
+    "the-promise": "^2.0.15",
     "uuid": "^7.0.2",
     "uuid-parse": "^1.1.0"
   },
@@ -63,8 +63,8 @@
   "resolutions": {
     "the-lodash": "^2.0.9",
     "the-logger": "^2.0.14",
-    "the-promise": "^2.0.13",
-    "@kubevious/helpers": "^1.0.65",
+    "the-promise": "^2.0.15",
+    "@kubevious/helpers": "^1.0.66",
     "@kubevious/easy-data-store": "^1.0.12",
     "@kubevious/helper-backend": "^1.0.38",
     "@kubevious/helper-logic-processor": "^1.0.99",
