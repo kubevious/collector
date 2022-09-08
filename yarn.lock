@@ -99,10 +99,10 @@
     the-logger "^2.0.14"
     the-promise "^2.0.13"
 
-"@kubevious/entity-meta@^1.0.45", "@kubevious/entity-meta@^1.0.55", "@kubevious/entity-meta@^1.0.69", "@kubevious/entity-meta@^1.0.71", "@kubevious/entity-meta@^1.0.72":
-  version "1.0.72"
-  resolved "https://registry.yarnpkg.com/@kubevious/entity-meta/-/entity-meta-1.0.72.tgz#52d1e9a67a41cace34b6f816afd877ba2b0dec2c"
-  integrity sha512-CkA6H0zSq4oP+giFU6iTHxOoEB4Pvudh+v/gCNQXso47TcuxVn/eolQPYxEnzXHCUviPiE794auUjepMLnxwog==
+"@kubevious/entity-meta@^1.0.45", "@kubevious/entity-meta@^1.0.69", "@kubevious/entity-meta@^1.0.74":
+  version "1.0.74"
+  resolved "https://registry.yarnpkg.com/@kubevious/entity-meta/-/entity-meta-1.0.74.tgz#25705c215408338f648e34d1abd5ddcc6bfcaea9"
+  integrity sha512-T1K9kqlg+0mgXzg9F0pz/odmairWmYreH52a1I6JRSZTC8oppRW6c3XdtIqgq0S7NfoK1oytPETnpRBxDhTtbg==
   dependencies:
     the-lodash "^2.0.9"
 
@@ -131,12 +131,12 @@
     the-logger "^2.0.9"
     the-promise "^2.0.13"
 
-"@kubevious/helper-logic-processor@^1.0.99":
-  version "1.0.99"
-  resolved "https://registry.yarnpkg.com/@kubevious/helper-logic-processor/-/helper-logic-processor-1.0.99.tgz#c8bd067f1d36a0ed8c68d1393b480ebed06d5d0c"
-  integrity sha512-fytj+N6XnTKrAW3fM6oFYnKLHYbnOEPl6Lmr8pnHScPugJn9wJqChbfs0vy2pt5kPIVzEfuPhGvZVtI/Awi00w==
+"@kubevious/helper-logic-processor@^1.0.101":
+  version "1.0.101"
+  resolved "https://registry.yarnpkg.com/@kubevious/helper-logic-processor/-/helper-logic-processor-1.0.101.tgz#39b03d4871befe0186a3e831f47b05e76322c2fa"
+  integrity sha512-VI47jqpq838ksQpaJMxl1SCIwaTScoBD/jyACS9vgeHmof+xWBwPmw6NJQh4ZIhqWr7caOXzxDMOjNwxzQGoBw==
   dependencies:
-    "@kubevious/entity-meta" "^1.0.71"
+    "@kubevious/entity-meta" "^1.0.74"
     "@kubevious/helper-backend" "^1.0.38"
     "@kubevious/state-registry" "^1.0.13"
     glob "^7.1.7"
@@ -145,7 +145,7 @@
     moment "^2.29.3"
     the-lodash "^2.0.9"
     the-logger "^2.0.14"
-    the-promise "^2.0.13"
+    the-promise "^2.0.15"
 
 "@kubevious/helper-mysql@^1.0.11":
   version "1.0.11"
@@ -170,17 +170,17 @@
     the-promise "^2.0.13"
     uuid "^8.3.2"
 
-"@kubevious/helper-rule-engine@^1.0.23":
-  version "1.0.23"
-  resolved "https://registry.yarnpkg.com/@kubevious/helper-rule-engine/-/helper-rule-engine-1.0.23.tgz#ceef9dd03e5d8209736a77bc55dd1ea08698c168"
-  integrity sha512-rotpSZiQUi8k4qdyCWUTDfsaxik5bodUaVQpWUDyzS9T6+6lQJezPbiLWdh3YBxi8iWGa7s71TRqJ+sbD4UWRQ==
+"@kubevious/helper-rule-engine@^1.0.27":
+  version "1.0.27"
+  resolved "https://registry.yarnpkg.com/@kubevious/helper-rule-engine/-/helper-rule-engine-1.0.27.tgz#f7576a2f74221a65f5f617c21234edfceadb84f0"
+  integrity sha512-9Zzbc2Z8G3TYLwsc0h5sjYncbEVtYSumTk4mL9qqhC28FXxBGafFfoqoHq7paqz05zCVUbmB9Fb2exN08iGhTA==
   dependencies:
     "@kubevious/helper-backend" "^1.0.38"
-    "@kubevious/kubik" "^1.0.14"
+    "@kubevious/kubik" "^1.0.22"
     "@kubevious/state-registry" "^1.0.13"
     the-lodash "^2.0.9"
     the-logger "^2.0.14"
-    the-promise "^2.0.13"
+    the-promise "^2.0.15"
 
 "@kubevious/helpers@^1.0.66":
   version "1.0.66"
@@ -202,16 +202,16 @@
     the-promise "^2.0.12"
     uuid "^8.3.2"
 
-"@kubevious/kubik@^1.0.14":
-  version "1.0.14"
-  resolved "https://registry.yarnpkg.com/@kubevious/kubik/-/kubik-1.0.14.tgz#271e49a9cffb33a1ff077d0d7069a9954f30aa0b"
-  integrity sha512-FI5erlcv8imr7xqkEq41c+PrEQa5eHNOBswHpQrJoLKGO6LVBbV8VtCHVdsUnxZQGAKG6+VUc7HVvFi8Jtywzw==
+"@kubevious/kubik@^1.0.22":
+  version "1.0.22"
+  resolved "https://registry.yarnpkg.com/@kubevious/kubik/-/kubik-1.0.22.tgz#b116d333cc86c2aa332757728b95251e6b79f251"
+  integrity sha512-Ppqke5raQr8w9881zkTnlaIz2bvOtQ2TyYih2DgIK8sDzL/+IXj95KTx6ZhfTcoCzyc8MfGKwkWpdQxmcph4Rw==
   dependencies:
-    "@kubevious/entity-meta" "^1.0.55"
+    "@kubevious/entity-meta" "^1.0.74"
     "@kubevious/state-registry" "^1.0.13"
     the-lodash "^2.0.9"
     the-logger "^2.0.14"
-    the-promise "^2.0.13"
+    the-promise "^2.0.15"
 
 "@kubevious/state-registry@^1.0.13":
   version "1.0.13"
