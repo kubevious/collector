@@ -6,7 +6,7 @@ import { Context } from '../../context';
 
 import moment from 'moment';
 
-const CronJob = require('cron').CronJob
+import { CronJob } from 'cron';
 
 import { Database } from '../../db';
 import { ProcessingTrackerScoper } from '@kubevious/helper-backend';
@@ -27,6 +27,8 @@ export class HistoryCleanupProcessor
     private _isProcessing : boolean = false;
 
     private _tableNames : string[];
+
+    private _currentCronJob : CronJob | null = null;
 
     constructor(context: Context)
     {
@@ -63,12 +65,19 @@ export class HistoryCleanupProcessor
 
     private _setupCronJob()
     {
+        if (this._currentCronJob) {
+            this._currentCronJob.stop();
+            this._currentCronJob = null;
+        }
+        
         const schedule = '* 0/15 0-2 * * *';
         // const schedule = '*/1 * * * *';
         const cleanupJob = new CronJob(schedule, () => {
             this._processSchedule();
         })
         cleanupJob.start();
+
+        this._currentCronJob = cleanupJob;
     }
 
     private _processSchedule()
