@@ -73,10 +73,10 @@
     the-lodash "^2.0.9"
     the-promise "^2.0.13"
 
-"@kubevious/data-models@^1.0.36":
-  version "1.0.36"
-  resolved "https://registry.yarnpkg.com/@kubevious/data-models/-/data-models-1.0.36.tgz#b36902fbfcf46b6fea65a9676a0a80da303e114f"
-  integrity sha512-c7KDH5BUqqMWkyWh1BJrOqgbUq+TDft1OIVasuRi5FJYAjkmDePWAOXHY7i1l+irgQNikutbY1hyseNeooTjJw==
+"@kubevious/data-models@^1.0.37":
+  version "1.0.37"
+  resolved "https://registry.yarnpkg.com/@kubevious/data-models/-/data-models-1.0.37.tgz#4d4f55562544c0327718bbf5ec42b458171b2762"
+  integrity sha512-8A6kgXxsYNCwJzIXAIEj4ZlV/QHsJ8LN4NCHc7AVE1CyNFfO5PCWVb47n8k8A6Qkg0Gz+hJgH+NeUAIDd3XTOw==
   dependencies:
     "@kubevious/easy-data-store" "^1.0.12"
     "@kubevious/helper-backend" "^1.0.38"

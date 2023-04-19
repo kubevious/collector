@@ -431,7 +431,11 @@ export class SnapshotPersistorTask
         return tracker.scope("logic-store", () => {
 
             const targetItems : Partial<LogicItemDataRow>[] = this._target.logicStoreItems;
-
+            for(const x of targetItems)
+            {
+                x.latest_part = this._partitionId;
+            }
+            
             return this._dataStore.table(this._context.dataStore.logicStore.LogicItemData)
                 .synchronizer()
                 .execute(targetItems)
