@@ -1,6 +1,5 @@
 import { Context } from "../context";
 import { ILogger } from "the-logger";
-import { Promise } from 'the-promise';
 
 import { DataStore, MySqlDriver, MySqlStatement } from '@kubevious/easy-data-store';
 

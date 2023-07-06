@@ -16,6 +16,7 @@ REPO_DEPENDENCIES=(
     "@kubevious/http-client"
     "@kubevious/helper-redis"
     "@kubevious/agent-middleware"
+    "@kubevious/websocket-server"
 )
 
 FORCE_RESOLVE_DEPENDENCIES=(

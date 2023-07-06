@@ -1,15 +1,15 @@
 import _ from 'the-lodash';
-import { Promise } from 'the-promise';
 import { RuleConfig } from '@kubevious/ui-middleware/dist/services/rule';
 import { makeDbRulesRow } from '@kubevious/data-models/dist/accessors/rules-engine';
 
 import { Migrator } from '../migration';
+import { MyPromise } from 'the-promise';
 
 export default Migrator()
     .handler(({ executeSql }) => {
 
         return Promise.resolve()
-            .then(() => Promise.serial(MARKERS, x => {
+            .then(() => MyPromise.serial(MARKERS, x => {
                 const sql = `INSERT IGNORE INTO \`markers\`(\`name\`, \`shape\`, \`color\`, \`propagate\`) VALUES (?, ?, ?, ?)`;
                 const params = [
                     x.name, 
@@ -19,7 +19,7 @@ export default Migrator()
                 ]
                 return executeSql(sql, params);
             }))
-            .then(() => Promise.serial(RULES, (x) => {
+            .then(() => MyPromise.serial(RULES, (x) => {
                 x.enabled = true;
                 const row = makeDbRulesRow(x);
                 const sql = `INSERT IGNORE INTO \`rules\`(\`name\`, \`enabled\`, \`date\`, \`target\`, \`script\`, \`hash\`) VALUES (?, ?, ?, ?, ?, ?)`;

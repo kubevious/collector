@@ -1,6 +1,5 @@
 import { ILogger } from 'the-logger';
 import _ from 'the-lodash';
-import { Promise } from 'the-promise';
 
 import { Context } from '../../context'
 

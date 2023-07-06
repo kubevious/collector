@@ -1,6 +1,5 @@
 import { ILogger } from 'the-logger';
 import _ from 'the-lodash';
-import { Promise } from 'the-promise';
 import { ProcessingTrackerScoper } from '@kubevious/helper-backend';
 
 import { Context } from '../../context'
@@ -9,6 +8,7 @@ import { RedisClient } from '@kubevious/helper-redis';
 import { RedisSearchNameFetcher } from '@kubevious/data-models';
 import { HashUtils } from '@kubevious/data-models';
 import { RegistryBundleNode } from '@kubevious/state-registry';
+import { MyPromise } from 'the-promise';
 
 const SKIPPED_ANNOTATIONS : Record<string, boolean> = {
     'kubectl.kubernetes.io/last-applied-configuration': true
@@ -73,7 +73,7 @@ export class SearchEnginePersistorTask
                     return this._setupAnnoData(innerTracker);
                 });
             })
-            // .then(() => Promise.timeout(10000))
+            // .then(() => MyPromise.delay(10000))
             // .then(()=> {
             //     throw new Error("ZZZZ")
             // })
@@ -156,7 +156,7 @@ export class SearchEnginePersistorTask
         const keyHashes : Record<string, string> = {}
         return this._redis.filterValues(`${keyPrefix}:*`)
             .then(keys => {
-                return Promise.execute(keys, (x) => {
+                return MyPromise.execute(keys, (x) => {
                     return this._redis.hashSet(x).getField('hash')
                         .then(hash => {
                             if (hash) {
@@ -310,14 +310,14 @@ export class SearchEnginePersistorTask
     {
         return Promise.resolve()
             .then(() => {
-                return Promise.execute(delta.toDelete, x => {
+                return MyPromise.execute(delta.toDelete, x => {
                     return this._redis.hashSet(x).delete();
                 }, {
                     concurrency: 100
                 });
             })
             .then(() => {
-                return Promise.execute(delta.items, x => {
+                return MyPromise.execute(delta.items, x => {
                     const client = this._redis.hashSet(x.key);
                     return client.delete()
                         .then(() => client.set(x.config));

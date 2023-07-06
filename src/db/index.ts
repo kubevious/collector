@@ -1,5 +1,5 @@
 import _ from 'the-lodash';
-import { Promise, Resolvable } from 'the-promise';
+import { MyPromise, Resolvable } from 'the-promise';
 import { ILogger } from 'the-logger' ;
 
 import * as fs from 'fs';
@@ -172,7 +172,7 @@ export class Database
                     }
                     const migrateableVersions = _.range(version + 1, TARGET_DB_VERSION + 1);
                     this.logger.info("[_processMigration] MigrateableVersions: ", migrateableVersions);
-                    return Promise.serial(migrateableVersions, x => this._processVersionMigration(x));
+                    return MyPromise.serial(migrateableVersions, x => this._processVersionMigration(x));
                 })
         });
     }

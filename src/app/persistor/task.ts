@@ -1,6 +1,5 @@
 import { ILogger } from 'the-logger';
 import _ from 'the-lodash';
-import { Promise } from 'the-promise';
 
 import { ProcessingTrackerScoper } from '@kubevious/helper-backend';
 import { Context } from '../../context'
@@ -17,6 +16,7 @@ import { BufferUtils } from '@kubevious/data-models';
 
 import { LatestSnapshotInfo } from '@kubevious/data-models/dist/accessors/config-accessor';
 import { LogicItemDataRow } from '@kubevious/data-models/dist/models/logic-store';
+import { MyPromise } from 'the-promise';
 
 
 export class SnapshotPersistorTask
@@ -102,7 +102,7 @@ export class SnapshotPersistorTask
             this._context.dataStore.snapshots.Timeline
         ];
 
-        return Promise.serial(tables, x => this._preparePartition(x.table(), tracker));
+        return MyPromise.serial(tables, x => this._preparePartition(x.table(), tracker));
     }
 
     private _preparePartition(table : ITableDriver<any>, tracker: ProcessingTrackerScoper)
@@ -172,7 +172,7 @@ export class SnapshotPersistorTask
 
     private _persistConfigDeltas(tracker: ProcessingTrackerScoper)
     {
-        return Promise.execute(this._configHashDelta, item => {
+        return MyPromise.execute(this._configHashDelta, item => {
             return this._persistConfig(tracker, item);
         }, {
             concurrency: 10
@@ -244,7 +244,7 @@ export class SnapshotPersistorTask
     {
         return tracker.scope("items", (innerTracker) => {
         
-            return Promise.execute(this._target.snapshot.dbSnapshot.getItems(), item => {
+            return MyPromise.execute(this._target.snapshot.dbSnapshot.getItems(), item => {
                 return this._persistSnapshotNode(item);
             }, {
                 concurrency: 10
@@ -257,7 +257,7 @@ export class SnapshotPersistorTask
     {
         return tracker.scope("diffs", (innerTracker) => {
         
-            return Promise.execute(this._target.snapshot.diffItems, item => {
+            return MyPromise.execute(this._target.snapshot.diffItems, item => {
                 return this._persistDiffNode(item);
             }, {
                 concurrency: 10
@@ -270,7 +270,7 @@ export class SnapshotPersistorTask
     {
         return tracker.scope("delta", (innerTracker) => {
         
-            return Promise.execute(this._target.latestDelta.diffItems, item => {
+            return MyPromise.execute(this._target.latestDelta.diffItems, item => {
                 return this._persistDeltaNode(item);
             }, {
                 concurrency: 10

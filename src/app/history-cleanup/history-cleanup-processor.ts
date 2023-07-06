@@ -1,5 +1,4 @@
 import _ from 'the-lodash';
-import { Promise } from 'the-promise';
 import { ILogger } from 'the-logger';
 
 import { Context } from '../../context';
@@ -11,6 +10,7 @@ import { CronJob } from 'cron';
 import { Database } from '../../db';
 import { ProcessingTrackerScoper } from '@kubevious/helper-backend';
 import { PartitionUtils } from '@kubevious/data-models';
+import { MyPromise } from 'the-promise';
 
 export class HistoryCleanupProcessor
 {
@@ -18,13 +18,13 @@ export class HistoryCleanupProcessor
     private _context : Context
 
     private _database : Database;
-    private _days : number = 15;
+    private _days = 15;
 
     private _startupDate? : moment.Moment;
     private _lastCleanupDate? : moment.Moment;
     
-    private _readyToProcess: boolean = false;
-    private _isProcessing : boolean = false;
+    private _readyToProcess = false;
+    private _isProcessing = false;
 
     private _tableNames : string[];
 
@@ -187,7 +187,7 @@ export class HistoryCleanupProcessor
         this._logger.info('[_cleanupHistoryTables] Running...');
 
         return tracker.scope("_cleanupHistoryTables", () => {
-            return Promise.serial(this._tableNames, x => this._cleanupHistoryTable(x, cutoffPartition));
+            return MyPromise.serial(this._tableNames, x => this._cleanupHistoryTable(x, cutoffPartition));
         });
     }
 
@@ -203,7 +203,7 @@ export class HistoryCleanupProcessor
                 const partitionsToDelete = partitionIds.filter(x => (x <= cutoffPartition));
                 this._logger.info('[_cleanupHistoryTable] table: %s, partitionsToDelete:', tableName, partitionsToDelete);
 
-                return Promise.serial(partitionsToDelete, x => this._deletePartition(tableName, x));
+                return MyPromise.serial(partitionsToDelete, x => this._deletePartition(tableName, x));
             });
     }
 

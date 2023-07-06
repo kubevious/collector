@@ -1,6 +1,5 @@
 import { ILogger } from 'the-logger';
 import _ from 'the-lodash';
-import { Promise } from 'the-promise';
 
 import { ProcessingTrackerScoper } from '@kubevious/helper-backend';
 import { Context } from '../../context'

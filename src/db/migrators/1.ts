@@ -1,7 +1,7 @@
 import _ from 'the-lodash';
-import { Promise } from 'the-promise';
 
 import { Migrator } from '../migration';
+import { MyPromise } from 'the-promise';
 
 export default Migrator()
     .handler(({ executeSql, sql }) => {
@@ -17,6 +17,6 @@ export default Migrator()
 
         ];
         
-        return Promise.serial(queries, x => executeSql(x));
+        return MyPromise.serial(queries, x => executeSql(x));
 
     });

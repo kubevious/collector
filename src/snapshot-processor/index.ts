@@ -1,5 +1,4 @@
 import _ from 'the-lodash';
-import { Promise } from 'the-promise';
 import { ILogger } from 'the-logger' ;
 
 import * as fs from 'fs';
@@ -12,6 +11,7 @@ import { ExecutionContext as RuleEngineExecutionContext, RuleObject } from '@kub
 
 import { Context } from '../context';
 import { ProcessingTrackerScoper } from '@kubevious/helper-backend';
+import { MyPromise } from 'the-promise';
 
 interface ProcessorEntry
 {
@@ -106,7 +106,7 @@ export class SnapshotProcessor
                            tracker : ProcessingTrackerScoper)
     {
         return tracker.scope("handlers", (procTracker) => {
-            return Promise.serial(this._processors, processor => {
+            return MyPromise.serial(this._processors, processor => {
                 return procTracker.scope(processor.name, (innerTracker) => {
 
                     const params : HandlerArgs = {
