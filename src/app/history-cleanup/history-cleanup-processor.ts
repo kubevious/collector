@@ -12,13 +12,15 @@ import { ProcessingTrackerScoper } from '@kubevious/helper-backend';
 import { PartitionUtils } from '@kubevious/data-models';
 import { MyPromise } from 'the-promise';
 
+const DEFAULT_HISTORY_RETENTION_DAYS = 15;
+
 export class HistoryCleanupProcessor
 {
     private _logger : ILogger;
     private _context : Context
 
     private _database : Database;
-    private _days = 15;
+    private _retentionDays : number;
 
     private _startupDate? : moment.Moment;
     private _lastCleanupDate? : moment.Moment;
@@ -44,6 +46,15 @@ export class HistoryCleanupProcessor
             this._database.snapshots.DeltaItems,
             this._database.snapshots.Timeline,
         ].map(x => x.tableName);
+
+        this._retentionDays = DEFAULT_HISTORY_RETENTION_DAYS;
+        if (process.env.COLLECTOR_HISTORY_RETENTION_DAYS) {
+            this._retentionDays = parseInt(process.env.COLLECTOR_HISTORY_RETENTION_DAYS);
+        }
+        if (_.isNullOrUndefined(this._retentionDays) || isNaN(this._retentionDays)) {
+            this._retentionDays = DEFAULT_HISTORY_RETENTION_DAYS
+        }
+        this._logger.info("Retention Days: %s", this._retentionDays);
     }
 
     get logger() {
@@ -156,7 +167,7 @@ export class HistoryCleanupProcessor
 
         this._lastCleanupDate = moment();
 
-        const cutoffDate = moment().subtract(this._days, 'days');
+        const cutoffDate = moment().subtract(this._retentionDays, 'days');
         this._logger.info('[_processCleanupNow] Cutoff Date: %s', cutoffDate);
 
         const cutoffPartition = PartitionUtils.getPartitionIdFromDate(cutoffDate.toDate());
